@@ -199,15 +199,6 @@ function login(){
   // Initial dashboard state: show welcome, hide modules
 welcomeText.style.display = "block";
 issueModule.classList.add("hidden");
-
-  // Role based UI
-  if(ROLE==="admin"){
-    adminTab.classList.remove("hidden");
-    adminAction.style.display="table-cell";
-  } else {
-    adminTab.classList.add("hidden");
-    adminAction.style.display="none";
-  }
 }
 
 function logout(){
@@ -234,6 +225,7 @@ function showAdmin(){
   hideAllModules();
   welcomeText.style.display = "none";
   alert("IT-Request module coming next");
+}
 </script>
 
 <!-- IT ISSUE LOGIC -->
@@ -241,6 +233,7 @@ function showAdmin(){
 
 </body>
 </html>
+
 
 
 
