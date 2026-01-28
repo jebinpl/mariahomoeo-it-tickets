@@ -111,7 +111,7 @@ th{background:#eee}
   <div class="nav-bar">
     <span class="nav-link" onclick="showIssue()">IT-Issue</span>
     <span class="nav-link" onclick="showRequest()">IT-Request</span>
-    <span class="nav-link hidden" id="adminTab" onclick="showAdmin()">IT-Admin</span>
+    <span class="nav-link" onclick="showAdmin()">IT-Admin</span>
     <span class="logout" onclick="logout()">Logout</span>
   </div>
 
@@ -233,9 +233,7 @@ function showRequest(){
 function showAdmin(){
   hideAllModules();
   welcomeText.style.display = "none";
-  issueModule.classList.remove("hidden"); // admin uses same table for now
-}
-
+  alert("IT-Request module coming next");
 </script>
 
 <!-- IT ISSUE LOGIC -->
@@ -243,6 +241,7 @@ function showAdmin(){
 
 </body>
 </html>
+
 
 
 
