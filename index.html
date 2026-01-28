@@ -22,6 +22,11 @@ button{cursor:pointer}
   padding:8px;
   margin:6px 0;
 }
+#loginPage select{
+  width:100%;
+  padding:8px;
+  margin:6px 0;
+}
 
 /* HEADER */
 .top-header{
@@ -71,8 +76,16 @@ th{background:#eee}
 <!-- LOGIN -->
 <div id="loginPage">
   <h2>Login</h2>
+
+  <select id="roleSelect">
+    <option value="">-- Select Role --</option>
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+
   <input id="username" placeholder="Username">
   <input id="password" type="password" placeholder="Password">
+
   <button onclick="login()">Login</button>
 </div>
 
@@ -155,20 +168,35 @@ const db = firebase.firestore();
 let ROLE = "";
 
 function login(){
-  const u=username.value;
-  const p=password.value;
+  const role = roleSelect.value;
+  const u = username.value.trim();
+  const p = password.value.trim();
 
-  if(u==="user" && p==="user123"){ ROLE="user"; }
-  else if(u==="admin" && p==="admin123"){ ROLE="admin"; }
-  else { alert("Invalid login"); return; }
+  if(!role){
+    alert("Please select role");
+    return;
+  }
+
+  if(role==="user" && u==="user" && p==="user123"){
+    ROLE="user";
+  }
+  else if(role==="admin" && u==="admin" && p==="admin123"){
+    ROLE="admin";
+  }
+  else{
+    alert("❌ Invalid credentials for selected role");
+    return;
+  }
 
   loginPage.classList.add("hidden");
   dashboard.classList.remove("hidden");
 
+  // Role based UI
   if(ROLE==="admin"){
     adminTab.classList.remove("hidden");
     adminAction.style.display="table-cell";
-  }else{
+  } else {
+    adminTab.classList.add("hidden");
     adminAction.style.display="none";
   }
 }
@@ -186,3 +214,4 @@ function showAdmin(){ showIssue(); }
 
 </body>
 </html>
+
