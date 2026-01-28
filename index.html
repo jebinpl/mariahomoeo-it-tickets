@@ -111,7 +111,6 @@ th{background:#eee}
   <div class="nav-bar">
     <span class="nav-link" onclick="showIssue()">IT-Issue</span>
     <span class="nav-link" onclick="showRequest()">IT-Request</span>
-    <span class="nav-link" onclick="showAdmin()">IT-Admin</span>
     <span class="nav-link hidden" id="adminTab" onclick="showAdmin()">IT-Admin</span>
     <span class="logout" onclick="logout()">Logout</span>
   </div>
@@ -121,7 +120,7 @@ th{background:#eee}
   <p id="welcomeText">Select a module from above.</p>
     
     <!-- IT ISSUE -->
-    <div id="issueModule">
+    <div id="issueModule" class="hidden">
       <h2>IT-Issue</h2>
       <button onclick="openForm()">➕ Create Ticket</button>
       <button onclick="exportExcel()">📊 Export Excel</button>
@@ -197,6 +196,10 @@ function login(){
   loginPage.classList.add("hidden");
   dashboard.classList.remove("hidden");
 
+  // Initial dashboard state: show welcome, hide modules
+welcomeText.style.display = "block";
+issueModule.classList.add("hidden");
+
   // Role based UI
   if(ROLE==="admin"){
     adminTab.classList.remove("hidden");
@@ -211,8 +214,28 @@ function logout(){
   location.reload();
 }
 
-function showIssue(){ issueModule.classList.remove("hidden"); }
-function showAdmin(){ showIssue(); }
+function hideAllModules(){
+  issueModule.classList.add("hidden");
+}
+
+function showIssue(){
+  hideAllModules();
+  welcomeText.style.display = "none";
+  issueModule.classList.remove("hidden");
+}
+
+function showRequest(){
+  hideAllModules();
+  welcomeText.style.display = "none";
+  alert("IT-Request module coming next");
+}
+
+function showAdmin(){
+  hideAllModules();
+  welcomeText.style.display = "none";
+  issueModule.classList.remove("hidden"); // admin uses same table for now
+}
+
 </script>
 
 <!-- IT ISSUE LOGIC -->
@@ -220,6 +243,7 @@ function showAdmin(){ showIssue(); }
 
 </body>
 </html>
+
 
 
 
