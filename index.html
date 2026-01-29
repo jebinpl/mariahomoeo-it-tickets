@@ -139,6 +139,17 @@ th{background:#eee}
         <input id="division" placeholder="Division" required>
         <input id="department" placeholder="Department" required>
         <input id="description" placeholder="Issue Description" required>
+        
+<label>Status</label>
+<select id="status" disabled>
+  <option value="">-- Select Status --</option>
+  <option value="Open">Open</option>
+  <option value="Pending">Pending</option>
+  <option value="Work In Progress">Work In Progress</option>
+  <option value="Resolved">Resolved</option>
+  <option value="Closed">Closed</option>
+</select>
+        
         <button type="submit">Submit</button>
         <button type="button" onclick="closeForm()">Cancel</button>
       </form>
@@ -252,6 +263,7 @@ function showAdmin(){
 
 </body>
 </html>
+
 
 
 
