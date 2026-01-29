@@ -13,29 +13,51 @@ db.collection("tickets").orderBy("createdAt","desc")
   render();
 });
 
-form.addEventListener("submit", e=>{
+form.addEventListener("submit", e => {
   e.preventDefault();
 
-const data = {
-  division: division.value,
-  department: department.value,
-  description: description.value,
-  status: status.value || "", // get whatever admin typed
-  action: editId ? tickets.find(t => t.id===editId).action : "Open"
-};
+  const data = {
+    division: division.value,
+    department: department.value,
+    description: description.value,
+    status: status.value || "Open",
+    action: editId ? tickets.find(t => t.id === editId).action : "Open"
+  };
 
-  if(editId){
-    // UPDATE existing ticket
+  // 🔁 EDIT EXISTING TICKET
+  if (editId) {
     db.collection("tickets").doc(editId).update(data);
-  } else {
-    // CREATE new ticket
-    db.collection("tickets").add({
-      ...data,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    closeForm();
+    return;
   }
 
-  closeForm();
+  // 🆕 CREATE NEW TICKET WITH IT-2026-001 FORMAT
+  db.collection("tickets")
+    .orderBy("createdAt", "desc")
+    .limit(1)
+    .get()
+    .then(snapshot => {
+
+      let nextNumber = 1;
+
+      if (!snapshot.empty) {
+        const lastTicket = snapshot.docs[0].data().ticketNo;
+        if (lastTicket) {
+          nextNumber = parseInt(lastTicket.split("-")[2]) + 1;
+        }
+      }
+
+      const year = new Date().getFullYear();
+      const ticketNo = `IT-${year}-${String(nextNumber).padStart(3, "0")}`;
+
+      db.collection("tickets").add({
+        ...data,
+        ticketNo: ticketNo,   // ✅ IT-2026-001
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      closeForm();
+    });
 });
 
 
@@ -62,7 +84,7 @@ function editTicket(t){
   division.value = t.division;
   department.value = t.department;
   description.value = t.description;
-  status: status.value || "Open",
+  status.value = t.status || "Open"; // ✅ FIXED
 
   openForm();
 }
@@ -82,7 +104,7 @@ function render(){
   tickets.forEach(t=>{
     ticketTable.innerHTML += `
     <tr>
-      <td>${t.id}</td>
+      <td>${t.ticketNo || "-"}</td>
       <td>${t.division}</td>
       <td>${t.department}</td>
       <td>${t.description}</td>
@@ -115,16 +137,21 @@ function render(){
 
 function exportExcel(){
   let rows=[["Ticket ID","Division","Department","Description","Date","Status","Action"]];
-  tickets.forEach(t=>rows.push([
-    t.id,t.division,t.department,t.description,
-    t.createdAt?t.createdAt.toDate().toLocaleString():"",
-    t.status||"",t.action
-  ]));
+  tickets.forEach(t => rows.push([
+  t.ticketNo || "-",   // ✅ HUMAN READABLE ID
+  t.division,
+  t.department,
+  t.description,
+  t.createdAt ? t.createdAt.toDate().toLocaleString() : "",
+  t.status || "",
+  t.action
+]));
   let wb=XLSX.utils.book_new();
   let ws=XLSX.utils.aoa_to_sheet(rows);
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
