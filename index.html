@@ -112,6 +112,7 @@ th{background:#eee}
     <span class="nav-link" onclick="showIssue()">IT-Issue</span>
     <span class="nav-link" onclick="showRequest()">IT-Request</span>
     <span class="nav-link" onclick="showAdmin()">IT-Admin</span>
+    <span id="roleDisplay" style="margin-left:auto;margin-right:20px;font-weight:bold;"></span>
     <span class="logout" onclick="logout()">Logout</span>
   </div>
 
@@ -194,7 +195,9 @@ function login(){
 
   loginPage.classList.add("hidden");
   dashboard.classList.remove("hidden");
-
+  document.getElementById("roleDisplay").innerText =
+  ROLE === "admin" ? "Role: Admin" : "Role: User";
+  
   // Initial dashboard state: show welcome, hide modules
 welcomeText.style.display = "block";
 issueModule.classList.add("hidden");
@@ -232,6 +235,7 @@ function showAdmin(){
 
 </body>
 </html>
+
 
 
 
