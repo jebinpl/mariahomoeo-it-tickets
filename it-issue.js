@@ -1,6 +1,11 @@
 let editId = null;
 let tickets = [];
 const form = document.getElementById("ticketForm");
+const division = document.getElementById("division");
+const department = document.getElementById("department");
+const description = document.getElementById("description");
+const status = document.getElementById("status");   // ✅ ADD THIS (IMPORTANT)
+const ticketTable = document.getElementById("ticketTable");
 
 db.collection("tickets").orderBy("createdAt","desc")
 .onSnapshot(snapshot=>{
@@ -37,7 +42,7 @@ const data = {
 
 function openForm() {
   form.classList.remove("hidden");
-  const status = document.getElementById("status"); // get the element first
+  
   if (ROLE !== "admin") {
     status.disabled = true; // user cannot edit
   } else {
@@ -120,6 +125,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
