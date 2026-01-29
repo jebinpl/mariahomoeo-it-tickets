@@ -33,27 +33,34 @@ function deleteTicket(id,action){
 }
 
 function render(){
-  ticketTable.innerHTML="";
+  ticketTable.innerHTML = "";
+
   tickets.forEach(t=>{
-    ticketTable.innerHTML+=`
+    ticketTable.innerHTML += `
     <tr>
       <td>${t.id}</td>
       <td>${t.division}</td>
       <td>${t.department}</td>
       <td>${t.description}</td>
       <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : ""}</td>
-      <td>${t.status||""}</td>
-      <td>${t.action}</td>
+      <td>${t.status || ""}</td>
+
+      <!-- ACTION COLUMN -->
       <td>
-        ${ROLE==="admin" ? `
-        <select onchange="updateAction('${t.id}',this.value)">
-          <option>Open</option>
-          <option>Pending</option>
-          <option>Work In Progress</option>
-          <option>Resolved</option>
-          <option>Closed</option>
-        </select>
-        <button onclick="deleteTicket('${t.id}','${t.action}')">🗑️</button>` : ""}
+        ${
+          ROLE === "admin"
+          ? `
+            <select onchange="updateAction('${t.id}', this.value)">
+              <option ${t.action==="Open"?"selected":""}>Open</option>
+              <option ${t.action==="Pending"?"selected":""}>Pending</option>
+              <option ${t.action==="Work In Progress"?"selected":""}>Work In Progress</option>
+              <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
+              <option ${t.action==="Closed"?"selected":""}>Closed</option>
+            </select>
+            <button onclick="deleteTicket('${t.id}','${t.action}')">🗑️</button>
+          `
+          : t.action
+        }
       </td>
     </tr>`;
   });
@@ -71,3 +78,4 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
