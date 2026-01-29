@@ -46,22 +46,24 @@ function render(){
       <td>${t.status || ""}</td>
 
       <!-- ACTION COLUMN -->
-      <td>
-        ${
-          ROLE === "admin"
-          ? `
-            <select onchange="updateAction('${t.id}', this.value)">
-              <option ${t.action==="Open"?"selected":""}>Open</option>
-              <option ${t.action==="Pending"?"selected":""}>Pending</option>
-              <option ${t.action==="Work In Progress"?"selected":""}>Work In Progress</option>
-              <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
-              <option ${t.action==="Closed"?"selected":""}>Closed</option>
-            </select>
-            <button onclick="deleteTicket('${t.id}','${t.action}')">🗑️</button>
-          `
-          : t.action
-        }
-      </td>
+<td>
+  ${
+    ROLE === "admin"
+    ? `
+      <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
+        <select onchange="updateAction('${t.id}', this.value)">
+          <option ${t.action==="Open"?"selected":""}>Open</option>
+          <option ${t.action==="Pending"?"selected":""}>Pending</option>
+          <option ${t.action==="Work In Progress"?"selected":""}>Work In Progress</option>
+          <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
+          <option ${t.action==="Closed"?"selected":""}>Closed</option>
+        </select>
+        <button onclick="deleteTicket('${t.id}','${t.action}')">🗑️</button>
+      </div>
+    `
+    : t.action
+  }
+</td>
     </tr>`;
   });
 }
@@ -78,4 +80,5 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
