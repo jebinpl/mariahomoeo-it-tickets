@@ -1,3 +1,4 @@
+let editId = null;
 let tickets = [];
 const form = document.getElementById("ticketForm");
 
@@ -9,19 +10,44 @@ db.collection("tickets").orderBy("createdAt","desc")
 
 form.addEventListener("submit", e=>{
   e.preventDefault();
-  db.collection("tickets").add({
+
+  const data = {
     division: division.value,
     department: department.value,
     description: description.value,
-    status: "",
-    action: "Open",
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
+    status: status.value || "",
+    action: "Open"
+  };
+
+  if(editId){
+    // UPDATE existing ticket
+    db.collection("tickets").doc(editId).update(data);
+  } else {
+    // CREATE new ticket
+    db.collection("tickets").add({
+      ...data,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }
+
   closeForm();
 });
 
+
+
 function openForm(){ form.classList.remove("hidden"); }
-function closeForm(){ form.classList.add("hidden"); form.reset(); }
+function closeForm(){ form.classList.add("hidden"); form.reset(); editId = null; }
+
+function editTicket(t){
+  editId = t.id;
+
+  division.value = t.division;
+  department.value = t.department;
+  description.value = t.description;
+  status.value = t.status || "";
+
+  openForm();
+}
 
 function updateAction(id,val){
   db.collection("tickets").doc(id).update({action:val});
@@ -58,6 +84,7 @@ function render(){
           <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
           <option ${t.action==="Closed"?"selected":""}>Closed</option>
         </select>
+        <button onclick='editTicket(${JSON.stringify(t)})'>✏️</button>
         <button onclick="deleteTicket('${t.id}','${t.action}')">🗑️</button>
       </div>
     `
@@ -80,5 +107,6 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
