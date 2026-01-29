@@ -11,13 +11,13 @@ db.collection("tickets").orderBy("createdAt","desc")
 form.addEventListener("submit", e=>{
   e.preventDefault();
 
-  const data = {
-    division: division.value,
-    department: department.value,
-    description: description.value,
-    status: status.value || "",
-    action: "Open"
-  };
+const data = {
+  division: division.value,
+  department: department.value,
+  description: description.value,
+  status: status.value, // use current status from the input/select
+  action: t ? t.action || "Open" : "Open" // keep previous action if editing
+};
 
   if(editId){
     // UPDATE existing ticket
@@ -120,6 +120,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
