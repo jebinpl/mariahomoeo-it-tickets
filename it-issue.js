@@ -37,8 +37,12 @@ form.addEventListener("submit", e=>{
 
 function openForm() {
   form.classList.remove("hidden");
-  const status = document.getElementById("status");
-  status.disabled = (ROLE !== "admin"); // enable only for admin
+  const status = document.getElementById("status"); // get the element first
+  if (ROLE !== "admin") {
+    status.disabled = true; // user cannot edit
+  } else {
+    status.disabled = false; // admin can edit
+  }
 }
 
 function closeForm() {
@@ -116,6 +120,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
