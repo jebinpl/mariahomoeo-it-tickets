@@ -62,7 +62,7 @@ function editTicket(t){
   division.value = t.division;
   department.value = t.department;
   description.value = t.description;
-  status.value = t.status || "";
+  status: status.value || "Open",
 
   openForm();
 }
@@ -87,7 +87,7 @@ function render(){
       <td>${t.department}</td>
       <td>${t.description}</td>
       <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : ""}</td>
-      <td>${t.status || ""}</td>
+      <td>${t.status || "Not Updated"}</td>
 
       <!-- ACTION COLUMN -->
 <td>
@@ -125,6 +125,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
