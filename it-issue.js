@@ -35,8 +35,17 @@ form.addEventListener("submit", e=>{
 
 
 
-function openForm(){ form.classList.remove("hidden"); }
-function closeForm(){ form.classList.add("hidden"); form.reset(); editId = null; }
+function openForm() {
+  form.classList.remove("hidden");
+  const status = document.getElementById("status");
+  status.disabled = (ROLE !== "admin"); // enable only for admin
+}
+
+function closeForm() {
+  form.classList.add("hidden");
+  form.reset();
+  editId = null;
+}
 
 function editTicket(t){
   editId = t.id;
@@ -107,6 +116,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
