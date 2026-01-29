@@ -15,8 +15,8 @@ const data = {
   division: division.value,
   department: department.value,
   description: description.value,
-  status: status.value, // use current status from the input/select
-  action: t ? t.action || "Open" : "Open" // keep previous action if editing
+  status: status.value || "", // get whatever admin typed
+  action: editId ? tickets.find(t => t.id===editId).action : "Open"
 };
 
   if(editId){
@@ -120,6 +120,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
