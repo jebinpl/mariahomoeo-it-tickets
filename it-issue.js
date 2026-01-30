@@ -43,16 +43,16 @@ form.addEventListener("submit", e => {
       if (!snapshot.empty) {
         const lastTicket = snapshot.docs[0].data().ticketNo;
         if (lastTicket) {
-          nextNumber = parseInt(lastTicket.split("-")[2]) + 1;
+          nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
         }
       }
 
-      const year = new Date().getFullYear();
-      const ticketNo = `IT-${year}-${String(nextNumber).padStart(3, "0")}`;
+      
+      const ticketNo = `ITI-${String(nextNumber).padStart(4, "0")}`;
 
       db.collection("tickets").add({
         ...data,
-        ticketNo: ticketNo,   // ✅ IT-2026-001
+        ticketNo: ticketNo,   // ✅ ITI-0001
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
@@ -151,6 +151,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
