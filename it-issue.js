@@ -4,15 +4,17 @@ const form = document.getElementById("ticketForm");
 const division = document.getElementById("division");
 const department = document.getElementById("department");
 const description = document.getElementById("description");
-const status = document.getElementById("status");   // ✅ ADD THIS (IMPORTANT)
+const status = document.getElementById("status");
 const ticketTable = document.getElementById("ticketTable");
 
-db.collection("tickets").orderBy("createdAt","desc")
-.onSnapshot(snapshot=>{
-  tickets = snapshot.docs.map(d=>({id:d.id,...d.data()}));
+// Listen to Firestore changes in real-time
+db.collection("tickets").orderBy("createdAt", "desc")
+.onSnapshot(snapshot => {
+  tickets = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
   render();
 });
 
+// Form submit: create or edit ticket
 form.addEventListener("submit", e => {
   e.preventDefault();
 
@@ -24,52 +26,48 @@ form.addEventListener("submit", e => {
     action: editId ? tickets.find(t => t.id === editId).action : "Open"
   };
 
-  // 🔁 EDIT EXISTING TICKET
+  // EDIT EXISTING TICKET
   if (editId) {
-    db.collection("tickets").doc(editId).update(data);
-    closeForm();
+    db.collection("tickets").doc(editId).update(data)
+      .then(() => closeForm())
+      .catch(err => console.error("Update failed:", err));
     return;
   }
 
-  // 🆕 CREATE NEW TICKET WITH IT-2026-001 FORMAT
-db.collection("tickets")
-  .orderBy("ticketNo", "desc")
-  .limit(1)
-  .get()
-  .then(snapshot => {
+  // CREATE NEW TICKET ITI-0001...
+  db.collection("tickets")
+    .orderBy("ticketNo", "desc")
+    .limit(1)
+    .get()
+    .then(snapshot => {
+      let nextNumber = 1;
 
-    let nextNumber = 1;
+      if (!snapshot.empty) {
+        const lastTicket = snapshot.docs[0].data().ticketNo;
+        if (lastTicket && lastTicket.startsWith("ITI-")) {
+          nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
+        }
+      }
 
-    if (!snapshot.empty) {
-      const lastTicket = snapshot.docs[0].data().ticketNo; // ITI-0007
-      nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
-    }
+      const ticketNo = `ITI-${String(nextNumber).padStart(4, "0")}`;
 
-    const ticketNo = `ITI-${String(nextNumber).padStart(4, "0")}`;
-
-    return db.collection("tickets").add({
-      ...data,
-      ticketNo,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      return db.collection("tickets").add({
+        ...data,
+        ticketNo,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => closeForm())
+    .catch(err => {
+      console.error("Ticket creation failed:", err);
+      alert("❌ Failed to create ticket. Check console.");
     });
-  })
-  .then(() => {
-    closeForm();
-  })
-  .catch(err => {
-    console.error("Ticket creation failed:", err);
-    alert("❌ Failed to create ticket. Check console.");
-  });
+});
 
-
+// OPEN / CLOSE FORM
 function openForm() {
   form.classList.remove("hidden");
-  
-  if (ROLE !== "admin") {
-    status.disabled = true; // user cannot edit
-  } else {
-    status.disabled = false; // admin can edit
-  }
+  status.disabled = ROLE !== "admin";
 }
 
 function closeForm() {
@@ -78,90 +76,82 @@ function closeForm() {
   editId = null;
 }
 
-function editTicket(t){
+// EDIT TICKET
+function editTicket(t) {
   editId = t.id;
 
   division.value = t.division;
   department.value = t.department;
   description.value = t.description;
-  status.value = t.status || "Open"; // ✅ FIXED
+  status.value = t.status || "Open";
 
   openForm();
 }
 
-function updateAction(id,val){
-  db.collection("tickets").doc(id).update({action:val});
+// UPDATE ACTION
+function updateAction(id, val) {
+  db.collection("tickets").doc(id).update({ action: val });
 }
 
-function deleteTicket(id,action){
-  if(action!=="Closed"){ alert("❌ Close ticket before deleting"); return; }
+// DELETE TICKET
+function deleteTicket(id, action) {
+  if (action !== "Closed") {
+    alert("❌ Close ticket before deleting");
+    return;
+  }
   db.collection("tickets").doc(id).delete();
 }
 
-function render(){
+// RENDER TABLE
+function render() {
   ticketTable.innerHTML = "";
 
-  tickets.forEach(t=>{
+  tickets.forEach(t => {
     ticketTable.innerHTML += `
-    <tr>
-      <td>${t.ticketNo || "-"}</td>
-      <td>${t.division}</td>
-      <td>${t.department}</td>
-      <td>${t.description}</td>
-      <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : ""}</td>
-      <td>${t.status || "Not Updated"}</td>
-
-      <!-- ACTION COLUMN -->
-<td>
-  ${
-    ROLE === "admin"
-    ? `
-      <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
-        <select onchange="updateAction('${t.id}', this.value)">
-          <option ${t.action==="Open"?"selected":""}>Open</option>
-          <option ${t.action==="Pending"?"selected":""}>Pending</option>
-          <option ${t.action==="Work In Progress"?"selected":""}>Work In Progress</option>
-          <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
-          <option ${t.action==="Closed"?"selected":""}>Closed</option>
-        </select>
-        <button onclick='editTicket(${JSON.stringify(t)})'>✏️</button>
-        <button onclick="deleteTicket('${t.id}','${t.action}')">🗑️</button>
-      </div>
-    `
-    : t.action
-  }
-</td>
-    </tr>`;
+      <tr>
+        <td>${t.ticketNo || "-"}</td>
+        <td>${t.division}</td>
+        <td>${t.department}</td>
+        <td>${t.description}</td>
+        <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : ""}</td>
+        <td>${t.status || "Not Updated"}</td>
+        <td>
+          ${
+            ROLE === "admin"
+            ? `<div style="display:flex; gap:5px; align-items:center; justify-content:center;">
+                <select onchange="updateAction('${t.id}', this.value)">
+                  <option ${t.action==="Open"?"selected":""}>Open</option>
+                  <option ${t.action==="Pending"?"selected":""}>Pending</option>
+                  <option ${t.action==="Work In Progress"?"selected":""}>Work In Progress</option>
+                  <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
+                  <option ${t.action==="Closed"?"selected":""}>Closed</option>
+                </select>
+                <button onclick='editTicket(${JSON.stringify(t)})'>✏️</button>
+                <button onclick="deleteTicket('${t.id}','${t.action}')">🗑️</button>
+              </div>`
+            : t.action
+          }
+        </td>
+      </tr>
+    `;
   });
 }
 
-function exportExcel(){
-  let rows=[["Ticket ID","Division","Department","Description","Date","Status","Action"]];
+// EXPORT EXCEL
+function exportExcel() {
+  let rows = [["Ticket ID", "Division", "Department", "Description", "Date", "Status", "Action"]];
   tickets.forEach(t => rows.push([
-  t.ticketNo || "-",   // ✅ HUMAN READABLE ID
-  t.division,
-  t.department,
-  t.description,
-  t.createdAt ? t.createdAt.toDate().toLocaleString() : "",
-  t.status || "",
-  t.action
-]));
-  let wb=XLSX.utils.book_new();
-  let ws=XLSX.utils.aoa_to_sheet(rows);
-  XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
-  XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
+    t.ticketNo || "-",
+    t.division,
+    t.department,
+    t.description,
+    t.createdAt ? t.createdAt.toDate().toLocaleString() : "",
+    t.status || "",
+    t.action || ""
+  ]));
+
+  let wb = XLSX.utils.book_new();
+  let ws = XLSX.utils.aoa_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb, ws, "IT Issues");
+  XLSX.writeFile(wb, "IT_Issue_Report.xlsx");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
