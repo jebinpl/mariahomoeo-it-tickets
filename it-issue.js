@@ -33,22 +33,22 @@ form.addEventListener("submit", e => {
 
   // 🆕 CREATE NEW TICKET WITH IT-2026-001 FORMAT
   db.collection("tickets")
-    .orderBy("createdAt", "desc")
-    .limit(1)
-    .get()
-    .then(snapshot => {
+  .orderBy("ticketNo", "desc")
+  .limit(1)
+  .get()
+  .then(snapshot => {
 
-      let nextNumber = 1;
+    let nextNumber = 1;
 
-      if (!snapshot.empty) {
-        const lastTicket = snapshot.docs[0].data().ticketNo;
-        if (lastTicket) {
-          nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
-        }
+    if (!snapshot.empty) {
+      const lastTicket = snapshot.docs[0].data().ticketNo; // ITI-0007
+      if (lastTicket) {
+        nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
       }
+    }
 
-      
-      const ticketNo = `ITI-${String(nextNumber).padStart(4, "0")}`;
+    const ticketNo = `ITI-${String(nextNumber).padStart(4, "0")}`;
+
 
       db.collection("tickets").add({
         ...data,
@@ -151,6 +151,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
