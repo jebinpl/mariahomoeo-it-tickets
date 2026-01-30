@@ -18,11 +18,12 @@ db.collection("tickets").orderBy("createdAt", "desc")
 form.addEventListener("submit", e => {
   e.preventDefault();
 
+  // Prepare ticket data
   const data = {
     division: division.value,
     department: department.value,
     description: description.value,
-    status: status.value || "Open",
+    status: status.value || "",       // <-- empty by default
     action: editId ? tickets.find(t => t.id === editId).action : "Open"
   };
 
@@ -41,14 +42,12 @@ form.addEventListener("submit", e => {
     .get()
     .then(snapshot => {
       let nextNumber = 1;
-
       if (!snapshot.empty) {
         const lastTicket = snapshot.docs[0].data().ticketNo;
         if (lastTicket && lastTicket.startsWith("ITI-")) {
           nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
         }
       }
-
       const ticketNo = `ITI-${String(nextNumber).padStart(4, "0")}`;
 
       return db.collection("tickets").add({
@@ -67,7 +66,7 @@ form.addEventListener("submit", e => {
 // OPEN / CLOSE FORM
 function openForm() {
   form.classList.remove("hidden");
-  status.disabled = ROLE !== "admin";
+  status.disabled = ROLE !== "admin"; // user cannot edit
 }
 
 function closeForm() {
@@ -79,15 +78,14 @@ function closeForm() {
 // EDIT TICKET
 function editTicket(t) {
   editId = t.id;
-
   division.value = t.division;
   department.value = t.department;
   description.value = t.description;
-  status.value = t.status || "";
+  status.value = t.status || "";  // <-- empty if new ticket
   openForm();
 }
 
-// UPDATE ACTION
+// UPDATE ACTION (dropdown)
 function updateAction(id, val) {
   db.collection("tickets").doc(id).update({ action: val });
 }
@@ -109,10 +107,10 @@ function render() {
     ticketTable.innerHTML += `
       <tr>
         <td>${t.ticketNo || "-"}</td>
-        <td>${t.division}</td>
-        <td>${t.department}</td>
-        <td>${t.description}</td>
-        <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : ""}</td>
+        <td>${t.division || "-"}</td>
+        <td>${t.department || "-"}</td>
+        <td>${t.description || "-"}</td>
+        <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : "-"}</td>
         <td>${t.status !== undefined && t.status !== "" ? t.status : "nil"}</td>
         <td>
           ${
@@ -139,20 +137,21 @@ function render() {
 // EXPORT EXCEL
 function exportExcel() {
   let rows = [["Ticket ID", "Division", "Department", "Description", "Date", "Status", "Action"]];
-  tickets.forEach(t => rows.push([
-    t.ticketNo || "-",
-    t.division,
-    t.department,
-    t.description,
-    t.createdAt ? t.createdAt.toDate().toLocaleString() : "",
-    (t.status !== undefined && t.status !== "") ? t.status : "nil",
-    t.action || ""
-  ]));
+
+  tickets.forEach(t => {
+    rows.push([
+      t.ticketNo || "-",
+      t.division || "-",
+      t.department || "-",
+      t.description || "-",
+      t.createdAt ? t.createdAt.toDate().toLocaleString() : "-",
+      (t.status !== undefined && t.status !== "") ? t.status : "nil", // <-- nil if empty
+      t.action || "-"
+    ]);
+  });
 
   let wb = XLSX.utils.book_new();
   let ws = XLSX.utils.aoa_to_sheet(rows);
   XLSX.utils.book_append_sheet(wb, ws, "IT Issues");
   XLSX.writeFile(wb, "IT_Issue_Report.xlsx");
 }
-
-
