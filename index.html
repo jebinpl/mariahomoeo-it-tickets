@@ -247,7 +247,7 @@ function login(){
     alert("❌ Invalid credentials for selected role");
     return;
   }
-
+  loginHeader.classList.add("hidden");   // HIDE login header
   loginPage.classList.add("hidden");
   dashboard.classList.remove("hidden");
 document.getElementById("headerRole").innerText =
@@ -294,6 +294,7 @@ function showAdmin(){
 
 </body>
 </html>
+
 
 
 
