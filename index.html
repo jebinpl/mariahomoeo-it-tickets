@@ -226,6 +226,18 @@ th{background:#eee}
 <!-- LOGIN + ROLE -->
 <script>
 let ROLE = "";
+window.onload = () => {
+  const savedRole = localStorage.getItem("ROLE");
+  if(savedRole){
+    ROLE = savedRole;
+    loginHeader.classList.add("hidden");
+    loginPage.classList.add("hidden");
+    dashboard.classList.remove("hidden");
+
+    headerRole.innerText = ROLE === "admin" ? "👨‍💼" : "👤";
+    headerRole.title = ROLE === "admin" ? "Admin" : "User";
+  }
+};
 
 function login(){
   const role = roleSelect.value;
@@ -238,10 +250,12 @@ function login(){
   }
 
   if(role==="user" && u==="user" && p==="user123"){
-    ROLE="user";
+    ROLE = "user";
+localStorage.setItem("ROLE", "user");
   }
   else if(role==="admin" && u==="admin" && p==="admin123"){
-    ROLE="admin";
+    ROLE = "admin";
+localStorage.setItem("ROLE", "admin");
   }
   else{
     alert("❌ Invalid credentials for selected role");
@@ -263,6 +277,7 @@ render();
 }
 
 function logout(){
+  localStorage.removeItem("ROLE");
   location.reload();
 }
 
@@ -294,6 +309,7 @@ function showAdmin(){
 
 </body>
 </html>
+
 
 
 
