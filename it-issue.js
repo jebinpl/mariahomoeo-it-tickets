@@ -145,7 +145,7 @@ function exportExcel() {
     t.department,
     t.description,
     t.createdAt ? t.createdAt.toDate().toLocaleString() : "",
-    (t.status !== undefined && t.status !== "") ? t.status : "nil"
+    (t.status !== undefined && t.status !== "") ? t.status : "nil",
     t.action || ""
   ]));
 
@@ -154,4 +154,5 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Issues");
   XLSX.writeFile(wb, "IT_Issue_Report.xlsx");
 }
+
 
