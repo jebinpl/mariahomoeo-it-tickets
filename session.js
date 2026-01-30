@@ -1,6 +1,6 @@
 // ===== Session Timeout =====
 let idleTimer;
-const IDLE_LIMIT = 10 * 60 * 1000; // 10 minutes
+const IDLE_LIMIT = 02 * 60 * 1000; // 10 minutes
 
 function resetIdleTimer() {
   if (localStorage.getItem("loggedIn") !== "true") return;
@@ -28,3 +28,4 @@ function logoutUser() {
 if (localStorage.getItem("loggedIn") === "true") {
   resetIdleTimer();
 }
+
