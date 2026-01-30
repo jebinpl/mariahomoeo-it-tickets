@@ -261,6 +261,11 @@ localStorage.setItem("ROLE", "admin");
     alert("❌ Invalid credentials for selected role");
     return;
   }
+localStorage.setItem("loggedIn", "true");
+localStorage.setItem("ROLE", ROLE);
+resetIdleTimer(); // 🔥 important
+
+  
   loginHeader.classList.add("hidden");   // HIDE login header
   loginPage.classList.add("hidden");
   dashboard.classList.remove("hidden");
@@ -277,9 +282,9 @@ render();
 }
 
 function logout(){
-  localStorage.removeItem("ROLE");
-  location.reload();
+  logoutUser();
 }
+
 
 function hideAllModules(){
   issueModule.classList.add("hidden");
@@ -306,9 +311,10 @@ function showAdmin(){
 
 <!-- IT ISSUE LOGIC -->
 <script src="it-issue.js"></script>
-
+<script src="session.js"></script>
 </body>
 </html>
+
 
 
 
