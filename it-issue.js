@@ -91,11 +91,15 @@ function updateAction(id, val) {
 }
 
 // DELETE TICKET
-function deleteTicket(id, action) {
+function deleteTicket(id, action){
   if (action !== "Closed") {
     alert("❌ Close ticket before deleting");
     return;
   }
+
+  const confirmDelete = confirm("⚠️ Are you sure you want to delete this ticket?");
+  if (!confirmDelete) return;
+
   db.collection("tickets").doc(id).delete();
 }
 
@@ -155,5 +159,6 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Issues");
   XLSX.writeFile(wb, "IT_Issue_Report.xlsx");
 }
+
 
 
