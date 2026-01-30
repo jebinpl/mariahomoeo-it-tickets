@@ -32,9 +32,7 @@ form.addEventListener("submit", e => {
   }
 
   // 🆕 CREATE NEW TICKET WITH IT-2026-001 FORMAT
-  db.collection("tickets")
-  .where("ticketNo", ">=", "ITI-")
-  .where("ticketNo", "<", "ITJ-")
+db.collection("tickets")
   .orderBy("ticketNo", "desc")
   .limit(1)
   .get()
@@ -49,13 +47,18 @@ form.addEventListener("submit", e => {
 
     const ticketNo = `ITI-${String(nextNumber).padStart(4, "0")}`;
 
-    db.collection("tickets").add({
+    return db.collection("tickets").add({
       ...data,
       ticketNo,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-
+  })
+  .then(() => {
     closeForm();
+  })
+  .catch(err => {
+    console.error("Ticket creation failed:", err);
+    alert("❌ Failed to create ticket. Check console.");
   });
 
 
@@ -148,6 +151,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"IT Issues");
   XLSX.writeFile(wb,"IT_Issue_Report.xlsx");
 }
+
 
 
 
