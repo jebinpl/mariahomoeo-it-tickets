@@ -111,7 +111,7 @@ function render() {
         <td>${t.department || "-"}</td>
         <td>${t.description || "-"}</td>
         <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : "-"}</td>
-        <td>${t.status !== undefined && t.status !== "" ? t.status : "nil"}</td>
+        <td>${t.status !== undefined && t.status !== "" ? t.status : "Nil"}</td>
         <td>
           ${
             ROLE === "admin"
@@ -145,7 +145,7 @@ function exportExcel() {
       t.department || "-",
       t.description || "-",
       t.createdAt ? t.createdAt.toDate().toLocaleString() : "-",
-      (t.status !== undefined && t.status !== "") ? t.status : "nil", // <-- nil if empty
+      (t.status !== undefined && t.status !== "") ? t.status : "Nil", // <-- nil if empty
       t.action || "-"
     ]);
   });
@@ -155,3 +155,4 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Issues");
   XLSX.writeFile(wb, "IT_Issue_Report.xlsx");
 }
+
