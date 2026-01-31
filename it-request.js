@@ -39,9 +39,9 @@ if (requestForm) {
       department: requestDepartment.value.trim(),
       description: requestDescription.value.trim(),
       status: requestStatus.value || "",
-      action: requestEditId
-        ? requests.find(r => r.id === requestEditId).action
-        : "Open"
+action: requestEditId
+  ? (requests.find(r => r.id === requestEditId)?.action || "Open")
+  : "Open"
     };
 
     /* ✏️ EDIT */
@@ -102,15 +102,18 @@ function closeForm() {
 /* ===============================
    EDIT REQUEST
 ================================ */
-function editRequest(r) {
+function editRequestById(id) {
+  const r = requests.find(x => x.id === id);
+  if (!r) return;
+
   requestEditId = r.id;
-  requestDivision.value = r.division;
-  requestDepartment.value = r.department;
-  requestDescription.value = r.description;
+  requestDivision.value = r.division || "";
+  requestDepartment.value = r.department || "";
+  requestDescription.value = r.description || "";
   requestStatus.value = r.status || "";
+
   openRequestForm();
 }
-
 /* ===============================
    UPDATE ACTION
 ================================ */
@@ -163,7 +166,7 @@ function renderRequests() {
                   <option ${r.action==="Resolved"?"selected":""}>Resolved</option>
                   <option ${r.action==="Closed"?"selected":""}>Closed</option>
                 </select>
-                <button onclick='editRequest(${JSON.stringify(r)})'>✏️</button>
+                <button onclick="editRequestById('${r.id}')">✏️</button>
                 <button onclick="deleteRequest('${r.id}','${r.action}')">🗑️</button>
               </div>`
               : r.action
@@ -204,3 +207,4 @@ function exportRequestExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Requests");
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
+
