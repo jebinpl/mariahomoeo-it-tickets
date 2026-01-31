@@ -164,6 +164,8 @@ function exportExcel() {
   XLSX.writeFile(wb, "IT_Issue_Report.xlsx");
 }
 
+window.render = render;
+
 
 
 
