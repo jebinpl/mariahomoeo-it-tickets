@@ -157,7 +157,20 @@ th{background:#eee}
 
   <!-- NAV -->
   <div class="nav-bar">
-    <span class="nav-link" onclick="showIssue()">IT-Issue</span>
+      <span class="nav-link" onclick="showIssue()">
+    IT-Issue
+    <span id="openCount"
+      style="
+        background:red;
+        color:white;
+        padding:2px 8px;
+        border-radius:12px;
+        font-size:12px;
+        margin-left:6px;
+      ">
+      0
+    </span>
+  </span>
     <span class="nav-link" onclick="showRequest()">IT-Request</span>
     <span class="nav-link" onclick="showAdmin()">IT-Admin</span>
     <span class="logout" onclick="logout()">Logout</span>
@@ -314,6 +327,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
