@@ -215,6 +215,47 @@ th{background:#eee}
       </table>
     </div>
 
+<!-- IT REQUEST -->
+<div id="requestModule" class="hidden">
+  <h2>IT-Request</h2>
+
+  <button onclick="openForm()">➕ Create Request</button>
+  <button onclick="exportExcel()">📊 Export Excel</button>
+
+  <form id="requestForm" class="hidden">
+    <input id="division" placeholder="Division" required>
+    <input id="department" placeholder="Department" required>
+
+    <input
+      id="description"
+      placeholder="Request Description (max 20 characters)"
+      maxlength="20"
+      required
+    >
+
+    <label for="status">Status</label>
+    <input id="status" placeholder="Enter Status">
+
+    <button type="submit">Submit</button>
+    <button type="button" onclick="closeForm()">Cancel</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Request ID</th>
+        <th>Division</th>
+        <th>Department</th>
+        <th>Request Description</th>
+        <th>Date Created</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="requestTable"></tbody>
+  </table>
+</div>
+    
   </div>
 </div>
 
@@ -302,6 +343,7 @@ function logout(){
 
 function hideAllModules(){
   issueModule.classList.add("hidden");
+  requestModule.classList.add("hidden");
 }
 
 function showIssue(){
@@ -313,7 +355,7 @@ function showIssue(){
 function showRequest(){
   hideAllModules();
   welcomeText.style.display = "none";
-  alert("IT-Request module coming next");
+  requestModule.classList.remove("hidden");
 }
 
 function showAdmin(){
@@ -325,9 +367,11 @@ function showAdmin(){
 
 <!-- IT ISSUE LOGIC -->
 <script src="it-issue.js"></script>
+<script src="it-request.js"></script>
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
