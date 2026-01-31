@@ -80,8 +80,8 @@ function openForm() {
 
 
 function closeForm() {
-  form.classList.add("hidden");
-  form.reset();
+  document.getElementById("ticketForm").classList.add("hidden");
+  document.getElementById("ticketForm").reset();
   editId = null;
 }
 
@@ -174,6 +174,7 @@ function exportExcel() {
 }
 
 window.render = render;
+
 
 
 
