@@ -3,10 +3,10 @@ let tickets = [];
 
 const openCountEl = document.getElementById("requestOpenCount");
 const form = document.getElementById("requestForm");
-const division = document.getElementById("division");
-const department = document.getElementById("department");
-const description = document.getElementById("description");
-const status = document.getElementById("status");
+const division = document.getElementById("requestDivision");
+const department = document.getElementById("requestDepartment");
+const description = document.getElementById("requestDescription");
+const status = document.getElementById("requestStatus");
 const ticketTable = document.getElementById("requestTable");
 
 /* 🔥 REAL-TIME LISTENER */
@@ -164,4 +164,5 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Requests");
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
+
 
