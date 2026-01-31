@@ -286,7 +286,7 @@ th{background:#eee}
 
 <!-- LOGIN + ROLE -->
 <script>
-let ROLE = "";
+window.ROLE = "";
 window.onload = () => {
   const savedRole = localStorage.getItem("ROLE");
   if(savedRole){
@@ -377,6 +377,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
