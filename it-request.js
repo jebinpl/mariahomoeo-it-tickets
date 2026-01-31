@@ -204,3 +204,5 @@ function exportRequestExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Requests");
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
+window.renderRequests = renderRequests;
+
