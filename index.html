@@ -169,15 +169,22 @@ th{background:#eee}
 
   <!-- NAV -->
   <div class="nav-bar">
+    
       <span class="nav-link" onclick="showIssue()">
     IT-Issue
 <span id="openCount" class="open-badge">0</span>
   </span>
+    
     <span class="nav-link" onclick="showRequest()">
   IT-Request
   <span id="requestOpenCount" class="open-badge">0</span>
 </span>
-    <span class="nav-link" onclick="showAdmin()">IT-Admin</span>
+    
+    <span class="nav-link" onclick="showAdmin()">
+  IT-Admin
+  <span id="adminOpenCount" class="open-badge">0</span>
+</span>
+
     <span class="logout" onclick="logout()">Logout</span>
   </div>
 
@@ -259,6 +266,45 @@ th{background:#eee}
       </tr>
     </thead>
     <tbody id="requestTable"></tbody>
+  </table>
+</div>
+
+    <!-- IT ADMIN -->
+<div id="adminModule" class="hidden">
+  <h2>IT-Admin</h2>
+
+  <button onclick="openAdminForm()">➕ Create Admin Ticket</button>
+  <button onclick="exportAdminExcel()">📊 Export Excel</button>
+
+  <form id="adminForm" class="hidden">
+    <input id="adminDivision" placeholder="Division" required>
+    <input id="adminDepartment" placeholder="Department" required>
+    <input
+      id="adminDescription"
+      placeholder="Admin Ticket Description (max 20 characters)"
+      maxlength="20"
+      required
+    >
+    <label>Status</label>
+    <input id="adminStatus" placeholder="Enter Status">
+
+    <button type="submit">Submit</button>
+    <button type="button" onclick="closeAdminForm()">Cancel</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ticket ID</th>
+        <th>Division</th>
+        <th>Department</th>
+        <th>Description</th>
+        <th>Date Created</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="adminTable"></tbody>
   </table>
 </div>
     
@@ -350,6 +396,7 @@ function logout(){
 function hideAllModules(){
   issueModule.classList.add("hidden");
   requestModule.classList.add("hidden");
+  adminModule.classList.add("hidden");
 }
 
 function showIssue(){
@@ -367,16 +414,18 @@ function showRequest(){
 function showAdmin(){
   hideAllModules();
   welcomeText.style.display = "none";
-  alert("IT-Request module coming next");
+  adminModule.classList.remove("hidden");
 }
 </script>
 
 <!-- IT ISSUE LOGIC -->
 <script src="it-issue.js"></script>
 <script src="it-request.js"></script>
+<script src="it-admin.js"></script>
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
