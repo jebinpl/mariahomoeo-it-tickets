@@ -91,6 +91,18 @@ th{background:#eee}
   margin-bottom:10px;
 }
 
+.open-badge {
+  background: red;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 6px;
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+}  
+
 #loginHeader h1{
   font-size:48px;
   margin:0;
@@ -159,19 +171,12 @@ th{background:#eee}
   <div class="nav-bar">
       <span class="nav-link" onclick="showIssue()">
     IT-Issue
-    <span id="openCount"
-      style="
-        background:red;
-        color:white;
-        padding:2px 8px;
-        border-radius:12px;
-        font-size:12px;
-        margin-left:6px;
-      ">
-      0
-    </span>
+<span id="openCount" class="open-badge">0</span>
   </span>
-    <span class="nav-link" onclick="showRequest()">IT-Request</span>
+    <span class="nav-link" onclick="showRequest()">
+  IT-Request
+  <span id="requestOpenCount" class="open-badge">0</span>
+</span>
     <span class="nav-link" onclick="showAdmin()">IT-Admin</span>
     <span class="logout" onclick="logout()">Logout</span>
   </div>
@@ -217,7 +222,7 @@ th{background:#eee}
 
 <!-- IT REQUEST -->
 <div id="requestModule" class="hidden">
-  <h2>IT-Request</h2>
+  <h2>IT-Request </h2>
 
   <button onclick="openForm()">➕ Create Request</button>
   <button onclick="exportExcel()">📊 Export Excel</button>
@@ -371,6 +376,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
