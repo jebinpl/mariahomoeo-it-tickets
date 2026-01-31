@@ -79,11 +79,12 @@ function openForm() {
 }
 
 
-function closeForm() {
-  document.getElementById("ticketForm").classList.add("hidden");
-  document.getElementById("ticketForm").reset();
+function closeIssueForm() {
+  form.classList.add("hidden");
+  form.reset();
   editId = null;
 }
+
 
 // EDIT TICKET
 function editTicket(t) {
@@ -174,6 +175,7 @@ function exportExcel() {
 }
 
 window.render = render;
+
 
 
 
