@@ -385,7 +385,9 @@ document.getElementById("headerRole").title =
   // Initial dashboard state: show welcome, hide modules
 welcomeText.style.display = "block";
 issueModule.classList.add("hidden");
-render();
+setTimeout(() => {
+  rerenderAllModules();
+}, 0);
 }
 
 function logout(){
@@ -398,6 +400,15 @@ function hideAllModules(){
   requestModule.classList.add("hidden");
   adminModule.classList.add("hidden");
 }
+
+
+function rerenderAllModules() {
+  if (typeof render === "function") render();               // it-issue
+  if (typeof renderRequests === "function") renderRequests(); // it-request
+  if (typeof renderAdmins === "function") renderAdmins();     // it-admin
+}
+
+
 
 function showIssue(){
   hideAllModules();
@@ -425,6 +436,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
