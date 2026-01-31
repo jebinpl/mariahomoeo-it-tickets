@@ -67,8 +67,17 @@ form.addEventListener("submit", e => {
 // OPEN / CLOSE FORM
 function openForm() {
   form.classList.remove("hidden");
-  status.disabled = ROLE !== "admin"; // user cannot edit
+
+  if (ROLE === "admin") {
+    status.disabled = false;
+    status.required = true;
+  } else {
+    status.disabled = true;
+    status.required = false; // 🔥 REQUIRED
+    status.value = "";       // clear value
+  }
 }
+
 
 function closeForm() {
   form.classList.add("hidden");
@@ -165,6 +174,7 @@ function exportExcel() {
 }
 
 window.render = render;
+
 
 
 
