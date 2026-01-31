@@ -31,7 +31,7 @@ form.addEventListener("submit", e => {
   // EDIT EXISTING TICKET
   if (editId) {
     db.collection("tickets").doc(editId).update(data)
-      .then(() => closeForm())
+      .then(() => closeIssueForm())
       .catch(err => console.error("Update failed:", err));
     return;
   }
@@ -57,7 +57,7 @@ form.addEventListener("submit", e => {
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     })
-    .then(() => closeForm())
+    .then(() => closeIssueForm())
     .catch(err => {
       console.error("Ticket creation failed:", err);
       alert("❌ Failed to create ticket. Check console.");
@@ -79,11 +79,10 @@ function openIssueForm() {
 }
 
 function closeIssueForm() {
-  form.classList.add("hidden");
-  form.reset();
+  document.getElementById("ticketForm").classList.add("hidden");
+  document.getElementById("ticketForm").reset();
   editId = null;
 }
-
 
 // EDIT TICKET
 function editTicket(t) {
@@ -174,6 +173,7 @@ function exportExcel() {
 }
 
 window.render = render;
+
 
 
 
