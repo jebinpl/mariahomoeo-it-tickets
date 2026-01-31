@@ -17,6 +17,7 @@ db.collection("it_requests").orderBy("createdAt", "desc")
 });
 
 /* 📝 CREATE / EDIT REQUEST */
+if (form) {
 form.addEventListener("submit", e => {
   e.preventDefault();
 
@@ -26,8 +27,8 @@ form.addEventListener("submit", e => {
     description: description.value,
     status: status.value || "",
     action: editId ? tickets.find(t => t.id === editId).action : "Open"
-  };
-
+  });
+}
   /* ✏️ EDIT */
   if (editId) {
     db.collection("it_requests").doc(editId).update(data)
@@ -67,7 +68,7 @@ form.addEventListener("submit", e => {
 });
 
 /* 🔓 OPEN / CLOSE FORM */
-function openForm() {
+function openRequestForm() {
   form.classList.remove("hidden");
   status.disabled = ROLE !== "admin";
 }
@@ -85,7 +86,7 @@ function editTicket(t) {
   department.value = t.department;
   description.value = t.description;
   status.value = t.status || "";
-  openForm();
+  openRequestForm();
 }
 
 /* 🔁 UPDATE ACTION */
@@ -164,5 +165,6 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Requests");
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
+
 
 
