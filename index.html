@@ -189,7 +189,8 @@ th{background:#eee}
       <form id="ticketForm" class="hidden">
         <input id="division" placeholder="Division" required>
         <input id="department" placeholder="Department" required>
-        <input id="description" placeholder="Issue Description" required>
+        <input id="description" placeholder="Issue Description (max 20 characters)" maxlength="20" required>
+
         
 <label for="status">Status</label>
 <input id="status" placeholder="Enter Status" required>
@@ -327,6 +328,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
