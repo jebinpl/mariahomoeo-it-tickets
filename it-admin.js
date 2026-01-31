@@ -204,6 +204,8 @@ function exportAdminExcel() {
   XLSX.writeFile(wb, "IT_Admin_Report.xlsx");
 }
 
-window.renderAdmins = renderAdmins;
+window.renderAdmins = renderAdminTickets;
+
+
 
 
