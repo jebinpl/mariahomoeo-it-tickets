@@ -1,137 +1,206 @@
-let editId = null;
-let tickets = [];
+/* ===============================
+   IT REQUEST MODULE
+================================ */
 
-const openCountEl = document.getElementById("requestOpenCount");
-const form = document.getElementById("requestForm");
-const division = document.getElementById("requestDivision");
-const department = document.getElementById("requestDepartment");
-const description = document.getElementById("requestDescription");
-const status = document.getElementById("requestStatus");
-const ticketTable = document.getElementById("requestTable");
+let requestEditId = null;
+let requests = [];
 
-/* 🔥 REAL-TIME LISTENER */
-db.collection("it_requests").orderBy("createdAt", "desc")
-.onSnapshot(snapshot => {
-  tickets = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-  render();
-});
+/* ELEMENTS */
+const requestForm = document.getElementById("requestForm");
+const requestDivision = document.getElementById("requestDivision");
+const requestDepartment = document.getElementById("requestDepartment");
+const requestDescription = document.getElementById("requestDescription");
+const requestStatus = document.getElementById("requestStatus");
+const requestTable = document.getElementById("requestTable");
+const requestOpenCount = document.getElementById("requestOpenCount");
 
-/* 📝 CREATE / EDIT REQUEST */
-form.addEventListener("submit", e => {
-  e.preventDefault();
+/* ===============================
+   REAL-TIME LISTENER
+================================ */
+db.collection("it_requests")
+  .orderBy("createdAt", "desc")
+  .onSnapshot(snapshot => {
+    requests = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    renderRequests();
+  });
 
-  const data = {
-    division: division.value,
-    department: department.value,
-    description: description.value,
-    status: status.value || "",
-    action: editId
-      ? tickets.find(t => t.id === editId)?.action
-      : "Open"
-  };
+/* ===============================
+   CREATE / EDIT REQUEST
+================================ */
+if (requestForm) {
+  requestForm.addEventListener("submit", e => {
+    e.preventDefault();
 
-  /* ✏️ EDIT */
-  if (editId) {
-    db.collection("it_requests").doc(editId).update(data)
-      .then(closeForm)
-      .catch(err => console.error("Update failed:", err));
-    return;
-  }
+    const data = {
+      division: requestDivision.value.trim(),
+      department: requestDepartment.value.trim(),
+      description: requestDescription.value.trim(),
+      status: requestStatus.value || "",
+      action: requestEditId
+        ? requests.find(r => r.id === requestEditId).action
+        : "Open"
+    };
 
-  /* ➕ CREATE ITR-0001 */
-  db.collection("it_requests")
-    .orderBy("ticketNo", "desc")
-    .limit(1)
-    .get()
-    .then(snapshot => {
-      let nextNumber = 1;
+    /* ✏️ EDIT */
+    if (requestEditId) {
+      db.collection("it_requests")
+        .doc(requestEditId)
+        .update(data)
+        .then(closeForm)
+        .catch(err => console.error("Update failed:", err));
+      return;
+    }
 
-      if (!snapshot.empty) {
-        const lastTicket = snapshot.docs[0].data().ticketNo;
-        if (lastTicket?.startsWith("ITR-")) {
-          nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
+    /* ➕ CREATE ITR-0001 */
+    db.collection("it_requests")
+      .orderBy("ticketNo", "desc")
+      .limit(1)
+      .get()
+      .then(snapshot => {
+        let next = 1;
+
+        if (!snapshot.empty) {
+          const last = snapshot.docs[0].data().ticketNo;
+          if (last && last.startsWith("ITR-")) {
+            next = parseInt(last.split("-")[1]) + 1;
+          }
         }
-      }
 
-      const ticketNo = `ITR-${String(nextNumber).padStart(4, "0")}`;
+        const ticketNo = `ITR-${String(next).padStart(4, "0")}`;
 
-      return db.collection("it_requests").add({
-        ...data,
-        ticketNo,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        return db.collection("it_requests").add({
+          ...data,
+          ticketNo,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      })
+      .then(closeForm)
+      .catch(err => {
+        console.error(err);
+        alert("❌ Failed to create request");
       });
-    })
-    .then(closeForm)
-    .catch(err => {
-      console.error("Request creation failed:", err);
-      alert("❌ Failed to create request");
-    });
-});
+  });
+}
 
-/* 🔓 OPEN / CLOSE FORM */
+/* ===============================
+   OPEN / CLOSE FORM
+================================ */
 function openRequestForm() {
-  form.classList.remove("hidden");
-  status.disabled = ROLE !== "admin";
+  requestForm.classList.remove("hidden");
+  requestStatus.disabled = ROLE !== "admin";
 }
 
 function closeForm() {
-  form.classList.add("hidden");
-  form.reset();
-  editId = null;
+  requestForm.classList.add("hidden");
+  requestForm.reset();
+  requestEditId = null;
 }
 
-/* ✏️ EDIT */
-function editTicket(t) {
-  editId = t.id;
-  division.value = t.division;
-  department.value = t.department;
-  description.value = t.description;
-  status.value = t.status || "";
+/* ===============================
+   EDIT REQUEST
+================================ */
+function editRequest(r) {
+  requestEditId = r.id;
+  requestDivision.value = r.division;
+  requestDepartment.value = r.department;
+  requestDescription.value = r.description;
+  requestStatus.value = r.status || "";
   openRequestForm();
 }
 
-/* 🔁 ACTION */
-function updateAction(id, val) {
-  db.collection("it_requests").doc(id).update({ action: val });
+/* ===============================
+   UPDATE ACTION
+================================ */
+function updateRequestAction(id, value) {
+  db.collection("it_requests").doc(id).update({ action: value });
 }
 
-/* 🗑️ DELETE */
-function deleteTicket(id, action) {
+/* ===============================
+   DELETE REQUEST
+================================ */
+function deleteRequest(id, action) {
   if (action !== "Closed") {
     alert("❌ Close request before deleting");
     return;
   }
-  if (!confirm("Delete this request?")) return;
+
+  if (!confirm("⚠️ Delete this request?")) return;
+
   db.collection("it_requests").doc(id).delete();
 }
 
-/* 📋 RENDER */
-function render() {
-  ticketTable.innerHTML = "";
+/* ===============================
+   RENDER TABLE
+================================ */
+function renderRequests() {
+  requestTable.innerHTML = "";
 
-  const openTickets = tickets.filter(t => t.action === "Open").length;
-  openCountEl.textContent = openTickets;
+  /* 🔴 OPEN COUNT */
+  const open = requests.filter(r => r.action === "Open").length;
+  if (requestOpenCount) requestOpenCount.textContent = open;
 
-  tickets.forEach(t => {
-    ticketTable.innerHTML += `
+  requests.forEach(r => {
+    requestTable.innerHTML += `
       <tr>
-        <td>${t.ticketNo || "-"}</td>
-        <td>${t.division}</td>
-        <td>${t.department}</td>
-        <td>${t.description}</td>
-        <td>${t.createdAt ? t.createdAt.toDate().toLocaleString() : "-"}</td>
-        <td>${t.status || "-"}</td>
+        <td>${r.ticketNo || "-"}</td>
+        <td>${r.division || "-"}</td>
+        <td>${r.department || "-"}</td>
+        <td>${r.description || "-"}</td>
+        <td>${r.createdAt ? r.createdAt.toDate().toLocaleString() : "-"}</td>
+        <td>${r.status || "-"}</td>
         <td>
           ${
             ROLE === "admin"
-              ? `<select onchange="updateAction('${t.id}', this.value)">
-                   <option ${t.action==="Open"?"selected":""}>Open</option>
-                   <option ${t.action==="Pending"?"selected":""}>Pending</option>
-                   <option ${t.action==="Closed"?"selected":""}>Closed</option>
-                 </select>`
-              : t.action
+              ? `
+              <div style="display:flex;gap:5px;justify-content:center;">
+                <select onchange="updateRequestAction('${r.id}',this.value)">
+                  <option ${r.action==="Open"?"selected":""}>Open</option>
+                  <option ${r.action==="Pending"?"selected":""}>Pending</option>
+                  <option ${r.action==="Work In Progress"?"selected":""}>Work In Progress</option>
+                  <option ${r.action==="Resolved"?"selected":""}>Resolved</option>
+                  <option ${r.action==="Closed"?"selected":""}>Closed</option>
+                </select>
+                <button onclick='editRequest(${JSON.stringify(r)})'>✏️</button>
+                <button onclick="deleteRequest('${r.id}','${r.action}')">🗑️</button>
+              </div>`
+              : r.action
           }
         </td>
-      </tr>`;
+      </tr>
+    `;
   });
+}
+
+/* ===============================
+   EXPORT EXCEL (SAME AS ISSUE)
+================================ */
+function exportRequestExcel() {
+  if (requests.length === 0) {
+    alert("No IT-Requests to export");
+    return;
+  }
+
+  let rows = [
+    ["Request ID", "Division", "Department", "Description", "Date", "Status", "Action"]
+  ];
+
+  requests.forEach(r => {
+    rows.push([
+      r.ticketNo || "-",
+      r.division || "-",
+      r.department || "-",
+      r.description || "-",
+      r.createdAt ? r.createdAt.toDate().toLocaleString() : "-",
+      r.status || "-",
+      r.action || "-"
+    ]);
+  });
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb, ws, "IT Requests");
+  XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
