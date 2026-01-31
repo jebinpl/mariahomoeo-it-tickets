@@ -152,7 +152,7 @@ function renderAdminTickets() {
         <td>${t.status || "-"}</td>
         <td>
           ${
-            window.ROLE === "admin"
+            String(window.ROLE) === "admin"
               ? `
               <div style="display:flex;gap:5px;justify-content:center;">
                 <select onchange="updateAdminAction('${t.id}',this.value)">
@@ -205,6 +205,7 @@ function exportAdminExcel() {
 }
 
 window.renderAdmins = renderAdminTickets;
+
 
 
 
