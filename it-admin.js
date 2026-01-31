@@ -80,7 +80,7 @@ if (adminForm) {
       .then(closeAdminForm)
       .catch(err => {
         console.error(err);
-        alert("❌ Failed to create admin ticket");
+        alert("❌ Failed to create ticket");
       });
   });
 }
@@ -89,13 +89,11 @@ if (adminForm) {
    OPEN / CLOSE FORM
 ================================ */
 function openAdminForm() {
-  if (!adminForm) return;
   adminForm.classList.remove("hidden");
-  adminStatus.disabled = ROLE !== "admin";
+  adminStatus.disabled = window.ROLE !== "admin";
 }
 
 function closeAdminForm() {
-  if (!adminForm) return;
   adminForm.classList.add("hidden");
   adminForm.reset();
   adminEditId = null;
@@ -138,10 +136,8 @@ function deleteAdminTicket(id, action) {
    RENDER TABLE
 ================================ */
 function renderAdminTickets() {
-  if (!adminTable) return;
   adminTable.innerHTML = "";
 
-  /* 🔴 OPEN COUNT */
   const open = adminTickets.filter(t => t.action === "Open").length;
   if (adminOpenCount) adminOpenCount.textContent = open;
 
@@ -156,18 +152,19 @@ function renderAdminTickets() {
         <td>${t.status || "-"}</td>
         <td>
           ${
-            ROLE === "admin"
-              ? `<div style="display:flex;gap:5px;justify-content:center;">
-                  <select onchange="updateAdminAction('${t.id}',this.value)">
-                    <option ${t.action==="Open"?"selected":""}>Open</option>
-                    <option ${t.action==="Pending"?"selected":""}>Pending</option>
-                    <option ${t.action==="Work In Progress"?"selected":""}>Work In Progress</option>
-                    <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
-                    <option ${t.action==="Closed"?"selected":""}>Closed</option>
-                  </select>
-                  <button onclick='editAdminTicket(${JSON.stringify(t)})'>✏️</button>
-                  <button onclick="deleteAdminTicket('${t.id}','${t.action}')">🗑️</button>
-                </div>`
+            window.ROLE === "admin"
+              ? `
+              <div style="display:flex;gap:5px;justify-content:center;">
+                <select onchange="updateAdminAction('${t.id}',this.value)">
+                  <option ${t.action==="Open"?"selected":""}>Open</option>
+                  <option ${t.action==="Pending"?"selected":""}>Pending</option>
+                  <option ${t.action==="Work In Progress"?"selected":""}>Work In Progress</option>
+                  <option ${t.action==="Resolved"?"selected":""}>Resolved</option>
+                  <option ${t.action==="Closed"?"selected":""}>Closed</option>
+                </select>
+                <button onclick='editAdminTicket(${JSON.stringify(t)})'>✏️</button>
+                <button onclick="deleteAdminTicket('${t.id}','${t.action}')">🗑️</button>
+              </div>`
               : t.action
           }
         </td>
@@ -181,11 +178,11 @@ function renderAdminTickets() {
 ================================ */
 function exportAdminExcel() {
   if (adminTickets.length === 0) {
-    alert("No admin tickets to export");
+    alert("No IT-Admin tickets to export");
     return;
   }
 
-  const rows = [
+  let rows = [
     ["Ticket ID", "Division", "Department", "Description", "Date", "Status", "Action"]
   ];
 
