@@ -1,5 +1,6 @@
 let editId = null;
 let tickets = [];
+const openCountEl = document.getElementById("openCount");
 const form = document.getElementById("ticketForm");
 const division = document.getElementById("division");
 const department = document.getElementById("department");
@@ -106,7 +107,10 @@ function deleteTicket(id, action){
 // RENDER TABLE
 function render() {
   ticketTable.innerHTML = "";
-
+  
+  const openTickets = tickets.filter(t => t.action === "Open").length;
+  openCountEl.textContent = openTickets;
+  
   tickets.forEach(t => {
     ticketTable.innerHTML += `
       <tr>
@@ -159,6 +163,7 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Issues");
   XLSX.writeFile(wb, "IT_Issue_Report.xlsx");
 }
+
 
 
 
