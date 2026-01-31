@@ -65,7 +65,7 @@ form.addEventListener("submit", e => {
 });
 
 // OPEN / CLOSE FORM
-function openForm() {
+function openIssueForm() {
   form.classList.remove("hidden");
 
   if (ROLE === "admin") {
@@ -73,11 +73,10 @@ function openForm() {
     status.required = true;
   } else {
     status.disabled = true;
-    status.required = false; // 🔥 REQUIRED
-    status.value = "";       // clear value
+    status.required = false;
+    status.value = "";
   }
 }
-
 
 function closeIssueForm() {
   form.classList.add("hidden");
@@ -175,6 +174,7 @@ function exportExcel() {
 }
 
 window.render = render;
+
 
 
 
