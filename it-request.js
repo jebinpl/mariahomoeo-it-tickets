@@ -17,55 +17,58 @@ db.collection("it_requests").orderBy("createdAt", "desc")
 });
 
 /* 📝 CREATE / EDIT REQUEST */
-if (form) {
-form.addEventListener("submit", e => {
-  e.preventDefault();
+if (if (form) {
+  form.addEventListener("submit", e => {
+    e.preventDefault();
 
-  const data = {
-    division: division.value,
-    department: department.value,
-    description: description.value,
-    status: status.value || "",
-    action: editId ? tickets.find(t => t.id === editId).action : "Open"
+    const data = {
+      division: division.value,
+      department: department.value,
+      description: description.value,
+      status: status.value || "",
+      action: editId
+        ? tickets.find(t => t.id === editId)?.action
+        : "Open"
+    };
+
+    /* ✏️ EDIT */
+    if (editId) {
+      db.collection("it_requests").doc(editId).update(data)
+        .then(closeForm)
+        .catch(err => console.error("Update failed:", err));
+      return;
+    }
+
+    /* ➕ CREATE ITR-0001… */
+    db.collection("it_requests")
+      .orderBy("ticketNo", "desc")
+      .limit(1)
+      .get()
+      .then(snapshot => {
+        let nextNumber = 1;
+
+        if (!snapshot.empty) {
+          const lastTicket = snapshot.docs[0].data().ticketNo;
+          if (lastTicket?.startsWith("ITR-")) {
+            nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
+          }
+        }
+
+        const ticketNo = `ITR-${String(nextNumber).padStart(4, "0")}`;
+
+        return db.collection("it_requests").add({
+          ...data,
+          ticketNo,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      })
+      .then(closeForm)
+      .catch(err => {
+        console.error("Request creation failed:", err);
+        alert("❌ Failed to create request. Check console.");
+      });
   });
 }
-  /* ✏️ EDIT */
-  if (editId) {
-    db.collection("it_requests").doc(editId).update(data)
-      .then(closeForm)
-      .catch(err => console.error("Update failed:", err));
-    return;
-  }
-
-  /* ➕ CREATE ITR-0001… */
-  db.collection("it_requests")
-    .orderBy("ticketNo", "desc")
-    .limit(1)
-    .get()
-    .then(snapshot => {
-      let nextNumber = 1;
-
-      if (!snapshot.empty) {
-        const lastTicket = snapshot.docs[0].data().ticketNo;
-        if (lastTicket && lastTicket.startsWith("ITR-")) {
-          nextNumber = parseInt(lastTicket.split("-")[1]) + 1;
-        }
-      }
-
-      const ticketNo = `ITR-${String(nextNumber).padStart(4, "0")}`;
-
-      return db.collection("it_requests").add({
-        ...data,
-        ticketNo,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    })
-    .then(closeForm)
-    .catch(err => {
-      console.error("Request creation failed:", err);
-      alert("❌ Failed to create request. Check console.");
-    });
-});
 
 /* 🔓 OPEN / CLOSE FORM */
 function openRequestForm() {
@@ -165,6 +168,7 @@ function exportExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Requests");
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
+
 
 
 
