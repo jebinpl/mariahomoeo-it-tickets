@@ -203,3 +203,7 @@ function exportAdminExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Admin Tickets");
   XLSX.writeFile(wb, "IT_Admin_Report.xlsx");
 }
+
+window.renderAdmins = renderAdmins;
+
+
