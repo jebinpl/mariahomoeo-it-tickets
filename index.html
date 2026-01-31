@@ -228,18 +228,19 @@ th{background:#eee}
   <button onclick="exportExcel()">📊 Export Excel</button>
 
   <form id="requestForm" class="hidden">
-    <input id="division" placeholder="Division" required>
-    <input id="department" placeholder="Department" required>
+    <!-- Changed IDs for IT-Request -->
+    <input id="requestDivision" placeholder="Division" required>
+    <input id="requestDepartment" placeholder="Department" required>
 
     <input
-      id="description"
+      id="requestDescription"
       placeholder="Request Description (max 20 characters)"
       maxlength="20"
       required
     >
 
-    <label for="status">Status</label>
-    <input id="status" placeholder="Enter Status">
+    <label for="requestStatus">Status</label>
+    <input id="requestStatus" placeholder="Enter Status">
 
     <button type="submit">Submit</button>
     <button type="button" onclick="closeForm()">Cancel</button>
@@ -376,6 +377,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
