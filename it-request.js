@@ -39,9 +39,9 @@ if (requestForm) {
       department: requestDepartment.value.trim(),
       description: requestDescription.value.trim(),
       status: requestStatus.value || "",
-action: requestEditId
-  ? (requests.find(r => r.id === requestEditId)?.action || "Open")
-  : "Open"
+      action: requestEditId
+        ? requests.find(r => r.id === requestEditId).action
+        : "Open"
     };
 
     /* ✏️ EDIT */
@@ -90,7 +90,7 @@ action: requestEditId
 ================================ */
 function openRequestForm() {
   requestForm.classList.remove("hidden");
-  requestStatus.disabled = ROLE !== "admin";
+  requestStatus.disabled = window.ROLE !== "admin";
 }
 
 function closeForm() {
@@ -102,18 +102,15 @@ function closeForm() {
 /* ===============================
    EDIT REQUEST
 ================================ */
-function editRequestById(id) {
-  const r = requests.find(x => x.id === id);
-  if (!r) return;
-
+function editRequest(r) {
   requestEditId = r.id;
-  requestDivision.value = r.division || "";
-  requestDepartment.value = r.department || "";
-  requestDescription.value = r.description || "";
+  requestDivision.value = r.division;
+  requestDepartment.value = r.department;
+  requestDescription.value = r.description;
   requestStatus.value = r.status || "";
-
   openRequestForm();
 }
+
 /* ===============================
    UPDATE ACTION
 ================================ */
@@ -156,7 +153,7 @@ function renderRequests() {
         <td>${r.status || "-"}</td>
         <td>
           ${
-            ROLE === "admin"
+            window.ROLE === "admin"
               ? `
               <div style="display:flex;gap:5px;justify-content:center;">
                 <select onchange="updateRequestAction('${r.id}',this.value)">
@@ -166,7 +163,7 @@ function renderRequests() {
                   <option ${r.action==="Resolved"?"selected":""}>Resolved</option>
                   <option ${r.action==="Closed"?"selected":""}>Closed</option>
                 </select>
-                <button onclick="editRequestById('${r.id}')">✏️</button>
+                <button onclick='editRequest(${JSON.stringify(r)})'>✏️</button>
                 <button onclick="deleteRequest('${r.id}','${r.action}')">🗑️</button>
               </div>`
               : r.action
@@ -178,7 +175,7 @@ function renderRequests() {
 }
 
 /* ===============================
-   EXPORT EXCEL (SAME AS ISSUE)
+   EXPORT EXCEL
 ================================ */
 function exportRequestExcel() {
   if (requests.length === 0) {
@@ -207,4 +204,3 @@ function exportRequestExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "IT Requests");
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
-
