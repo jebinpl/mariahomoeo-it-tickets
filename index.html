@@ -49,10 +49,17 @@ button{cursor:pointer}
   padding: 8px 0;
   z-index: 800;
   display: flex;
+  align-items: center;
   gap: 10px;
 }
 
-
+  .action-bar h2 {
+  margin: 0;
+  font-size: 26px;      /* adjust size as needed */
+  line-height: 1.2;
+  flex-shrink: 0;       /* prevent heading from shrinking */
+}
+  
   /* Sticky table headers for all modules */
 #issueModule thead th,
 #requestModule thead th,
@@ -240,6 +247,7 @@ th{background:#eee}
       <h2>IT-Issue</h2>
       
 <div class="action-bar">
+  <h2>IT-Issue</h2>
   <button onclick="openIssueForm()">➕ Create Ticket</button>
   <button onclick="exportExcel()">📊 Export Excel</button>
 </div>
@@ -278,6 +286,7 @@ th{background:#eee}
   <h2>IT-Request </h2>
 
 <div class="action-bar">
+  <h2>IT-Request </h2>
   <button onclick="openRequestForm()">➕ Create Request</button>
   <button onclick="exportRequestExcel()">📊 Export Excel</button>
 </div>
@@ -320,9 +329,8 @@ th{background:#eee}
 
     <!-- IT ADMIN -->
 <div id="adminModule" class="hidden">
-  <h2>IT-Admin</h2>
-
 <div class="action-bar">
+  <h2>IT-Admin</h2>
   <button onclick="openAdminForm()">➕ Create Admin Ticket</button>
   <button onclick="exportAdminExcel()">📊 Export Excel</button>
 </div>
@@ -488,6 +496,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
