@@ -71,7 +71,19 @@ button{cursor:pointer}
   line-height: 1.2;
   flex-shrink: 0;       /* prevent heading from shrinking */
 }
-  
+  /* Table container - scrollable independently */
+.table-container {
+  max-height: calc(100vh - 162px); /* leave space for nav + heading + action */
+  overflow-y: auto;
+}
+
+  /* Sticky table headers */
+.table-container table thead th {
+  position: sticky;
+  top: 0; /* relative to scrollable container */
+  background: #eee;
+  z-index: 800;
+}
   /* Sticky table headers for all modules */
 #issueModule thead th,
 #requestModule thead th,
@@ -90,6 +102,7 @@ button{cursor:pointer}
   padding-top: 0px; 
 }
 
+  
 
 /* HEADER */
 .top-header{
@@ -274,7 +287,7 @@ th{background:#eee}
         <button type="submit">Submit</button>
         <button type="button" onclick="closeIssueForm()">Cancel</button>
       </form>
-
+<div class="table-container">
       <table>
         <thead>
           <tr>
@@ -290,6 +303,7 @@ th{background:#eee}
         <tbody id="ticketTable"></tbody>
       </table>
     </div>
+  </div>
 
 <!-- IT REQUEST -->
 <div id="requestModule" class="hidden">
@@ -319,7 +333,7 @@ th{background:#eee}
   <button type="button" onclick="closeForm()">Cancel</button>
 </form>
 
-
+<div class="table-container">
   <table>
     <thead>
       <tr>
@@ -334,6 +348,7 @@ th{background:#eee}
     </thead>
     <tbody id="requestTable"></tbody>
   </table>
+</div>
 </div>
 
     <!-- IT ADMIN -->
@@ -360,7 +375,7 @@ th{background:#eee}
     <button type="submit">Submit</button>
     <button type="button" onclick="closeAdminForm()">Cancel</button>
   </form>
-
+<div class="table-container">
   <table>
     <thead>
       <tr>
@@ -376,7 +391,7 @@ th{background:#eee}
     <tbody id="adminTable"></tbody>
   </table>
 </div>
-    
+</div> 
   </div>
 </div>
 
@@ -505,6 +520,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
