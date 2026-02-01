@@ -30,16 +30,16 @@ button{cursor:pointer}
   margin:6px 0;
   box-sizing:border-box;
 }
-  #headerRole{
+ #headerRole{
   position:absolute;
   right:20px;
   top:50%;
   transform:translateY(-50%);
-  font-size:22px;
-  font-weight:bold;
-  cursor:default;
-  z-index: 1100;
+  font-size:26px;        /* optional */
+  z-index: 1300;         /* 🔥 higher than header */
+  pointer-events: none; /* optional – prevents click issues */
 }
+
 
 /* Sticky module headings */
 .module-heading{
@@ -85,17 +85,14 @@ button{cursor:pointer}
 /* HEADER */
 .top-header{
   background:#9aa7a7;
-  color:white;
-  display:flex;
-  align-items:center;
-  padding:1px 20px;
-  position:fixed;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 80px;
-  z-index: 1000;
+  z-index: 1200;   /* 🔥 was 1000 */
 }
+
 .logo-left{height:60px;margin-right:20px}
 .header-left h1{font-size:52px;margin:0;letter-spacing:4px}
 .header-left p{margin:5px 0;font-size:18px}
@@ -498,6 +495,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
