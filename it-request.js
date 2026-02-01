@@ -90,7 +90,7 @@ if (requestForm) {
 ================================ */
 function openRequestForm() {
   requestForm.classList.remove("hidden");
-  requestStatus.disabled = window.ROLE !== "admin";
+  requestStatus.disabled = (window.ROLE || localStorage.getItem("ROLE")) !== "admin";
 }
 
 function closeForm() {
@@ -136,6 +136,7 @@ function deleteRequest(id, action) {
    RENDER TABLE
 ================================ */
 function renderRequests() {
+  const currentRole = window.ROLE || localStorage.getItem("ROLE");
   requestTable.innerHTML = "";
 
   /* 🔴 OPEN COUNT */
@@ -153,7 +154,7 @@ function renderRequests() {
         <td>${r.status || "-"}</td>
         <td>
           ${
-            window.ROLE === "admin"
+            currentRole === "admin"
               ? `
               <div style="display:flex;gap:5px;justify-content:center;">
                 <select onchange="updateRequestAction('${r.id}',this.value)">
@@ -205,4 +206,5 @@ function exportRequestExcel() {
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
 window.renderRequests = renderRequests;
+
 
