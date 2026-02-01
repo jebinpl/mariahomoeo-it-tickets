@@ -68,7 +68,7 @@ form.addEventListener("submit", e => {
 function openIssueForm() {
   form.classList.remove("hidden");
 
-  if (ROLE === "admin") {
+ if ((ROLE || localStorage.getItem("ROLE")) === "admin") {
     status.disabled = false;
     status.required = true;
   } else {
@@ -174,6 +174,7 @@ function exportExcel() {
 }
 
 window.render = render;
+
 
 
 
