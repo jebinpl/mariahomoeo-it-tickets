@@ -41,13 +41,25 @@ button{cursor:pointer}
   z-index: 1100;
 }
 
+/* Sticky module headings */
+.module-heading {
+  position: sticky;
+  top: 140px;       /* header + nav height */
+  background: white;
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 24px;
+  z-index: 802;     /* above action bar */
+  border-bottom: 1px solid #ccc;
+}  
+  
   /* ===== STICKY ACTION BAR ===== */
 .action-bar{
   position: sticky;
-  top: 60px; /* header + nav */
+  top: 180px; /* header + nav */
   background: white;
-  padding: 8px 0;
-  z-index: 800;
+  padding: 8px 10;
+  z-index: 801;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -65,9 +77,9 @@ button{cursor:pointer}
 #requestModule thead th,
 #adminModule thead th{
   position: sticky;
-  top: 100px;     /* header + nav + buttons */
+  top: 220px;     /* header + nav + buttons */
   background: #eee;
-  z-index: 700;
+  z-index: 800;
 }
 
 #issueModule,
@@ -244,10 +256,9 @@ th{background:#eee}
     
     <!-- IT ISSUE -->
     <div id="issueModule" class="hidden">
-      <h2>IT-Issue</h2>
+      <h2 class="module-heading">IT-Issue</h2>
       
 <div class="action-bar">
-  <h2>IT-Issue</h2>
   <button onclick="openIssueForm()">➕ Create Ticket</button>
   <button onclick="exportExcel()">📊 Export Excel</button>
 </div>
@@ -283,10 +294,9 @@ th{background:#eee}
 
 <!-- IT REQUEST -->
 <div id="requestModule" class="hidden">
-  <h2>IT-Request </h2>
+  <h2 class="module-heading">IT-Request</h2>
 
 <div class="action-bar">
-  <h2>IT-Request </h2>
   <button onclick="openRequestForm()">➕ Create Request</button>
   <button onclick="exportRequestExcel()">📊 Export Excel</button>
 </div>
@@ -329,8 +339,8 @@ th{background:#eee}
 
     <!-- IT ADMIN -->
 <div id="adminModule" class="hidden">
+<h2 class="module-heading">IT-Admin</h2>  
 <div class="action-bar">
-  <h2>IT-Admin</h2>
   <button onclick="openAdminForm()">➕ Create Admin Ticket</button>
   <button onclick="exportAdminExcel()">📊 Export Excel</button>
 </div>
@@ -496,6 +506,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
