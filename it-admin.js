@@ -137,7 +137,8 @@ function deleteAdminTicket(id, action) {
    RENDER TABLE
 ================================ */
 function renderAdminTickets() {
-  const currentRole = window.ROLE || localStorage.getItem("ROLE");
+  const currentRole = localStorage.getItem("ROLE"); // 🔥 FINAL SOURCE
+
   adminTable.innerHTML = "";
 
   const open = adminTickets.filter(t => t.action === "Open").length;
@@ -207,6 +208,12 @@ function exportAdminExcel() {
 }
 
 window.renderAdmins = renderAdminTickets;
+function forceAdminRender() {
+  if (typeof renderAdminTickets === "function") {
+    renderAdminTickets();
+  }
+}
+
 
 
 
