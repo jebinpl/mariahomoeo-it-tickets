@@ -206,5 +206,12 @@ function exportRequestExcel() {
   XLSX.writeFile(wb, "IT_Request_Report.xlsx");
 }
 window.renderRequests = renderRequests;
+// 🔥 FORCE ADMIN RENDER (IMPORTANT)
+window.forceRequestRender = function () {
+  if (typeof renderRequests === "function") {
+    renderRequests();
+  }
+};
+
 
 
