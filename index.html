@@ -40,6 +40,36 @@ button{cursor:pointer}
   cursor:default;
 }
 
+  /* ===== STICKY ACTION BAR ===== */
+.action-bar{
+  position: sticky;
+  top: 140px; /* header + nav */
+  background: white;
+  padding: 8px 0;
+  z-index: 800;
+  display: flex;
+  gap: 10px;
+}
+
+
+  /* Sticky table headers for all modules */
+#issueModule thead th,
+#requestModule thead th,
+#adminModule thead th{
+  position: sticky;
+  top: 190px;     /* header + nav + buttons */
+  background: #eee;
+  z-index: 700;
+}
+
+#issueModule,
+#requestModule,
+#adminModule{
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+
 /* HEADER */
 .top-header{
   background:#9aa7a7;
@@ -71,7 +101,7 @@ button{cursor:pointer}
   display:flex;
   align-items:center;
   position: fixed;
-  top: 80px;
+  top: 64px;
   left: 0;
   width: 100%;
   z-index: 999;
@@ -82,7 +112,7 @@ button{cursor:pointer}
 /* CONTENT */
 #content{
   padding:20px;
-  margin-top: 140px;   /* 🔥 header (80) + nav (~60) */
+  margin-top: 120px;   /* 🔥 header (80) + nav (~60) */
 }
 /* FORM */
 form{background:#f9f9f9;padding:15px;margin:10px 0}
@@ -207,8 +237,11 @@ th{background:#eee}
     <!-- IT ISSUE -->
     <div id="issueModule" class="hidden">
       <h2>IT-Issue</h2>
-      <button onclick="openIssueForm()">➕ Create Ticket</button>
-      <button onclick="exportExcel()">📊 Export Excel</button>
+      
+<div class="action-bar">
+  <button onclick="openIssueForm()">➕ Create Ticket</button>
+  <button onclick="exportExcel()">📊 Export Excel</button>
+</div>
 
       <form id="ticketForm" class="hidden">
         <input id="division" placeholder="Division" required>
@@ -243,8 +276,11 @@ th{background:#eee}
 <div id="requestModule" class="hidden">
   <h2>IT-Request </h2>
 
+<div class="action-bar">
   <button onclick="openRequestForm()">➕ Create Request</button>
   <button onclick="exportRequestExcel()">📊 Export Excel</button>
+</div>
+
 
   <form id="requestForm" class="hidden">
   <input id="requestDivision" placeholder="Division" required>
@@ -285,8 +321,11 @@ th{background:#eee}
 <div id="adminModule" class="hidden">
   <h2>IT-Admin</h2>
 
+<div class="action-bar">
   <button onclick="openAdminForm()">➕ Create Admin Ticket</button>
   <button onclick="exportAdminExcel()">📊 Export Excel</button>
+</div>
+
 
   <form id="adminForm" class="hidden">
     <input id="adminDivision" placeholder="Division" required>
@@ -448,6 +487,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
