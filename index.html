@@ -46,23 +46,15 @@ button{cursor:pointer}
   position: sticky;
   top: 82px;       /* header + nav height */
   background: white;
-  margin: 0;
-  padding: 8px 10px;
-  font-size: 24px;
-  z-index: 802;     /* above action bar */
-  border-bottom: 1px solid #ccc;
+  z-index: 802;     /* above action bar */ 
 }  
   
   /* ===== STICKY ACTION BAR ===== */
 .action-bar{
   position: sticky;
   top: 122px; /* header + nav */
-  background: white;
-  padding: 8px 10px;
+  background: white; 
   z-index: 801;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
   .action-bar h2 {
@@ -84,25 +76,6 @@ button{cursor:pointer}
   background: #eee;
   z-index: 800;
 }
-  /* Sticky table headers for all modules */
-#issueModule thead th,
-#requestModule thead th,
-#adminModule thead th{
-  position: sticky;
-  top: 162px;     /* header + nav + buttons */
-  background: #eee;
-  z-index: 800;
-}
-
-#issueModule,
-#requestModule,
-#adminModule{
-  max-height: calc(100vh - 82px);
-  overflow-y: auto;
-  padding-top: 0px; 
-}
-
-  
 
 /* HEADER */
 .top-header{
@@ -520,6 +493,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
