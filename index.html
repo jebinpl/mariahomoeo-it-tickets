@@ -478,16 +478,13 @@ document.getElementById("headerRoleIcon").innerText =
 
 document.getElementById("headerRoleText").innerText =
   ROLE === "admin" ? "Welcome Admin" : "Welcome User";
-
-
-document.getElementById("headerRole").title =
-  ROLE === "admin" ? "Admin" : "User";
   
   // Initial dashboard state: show welcome, hide modules
 welcomeText.style.display = "block";
 issueModule.classList.add("hidden");
 setTimeout(() => {
   rerenderAllModules();
+  forceIssueRender(); 
   forceRequestRender();
   forceAdminRender(); // 🔥 important
 }, 0);
@@ -511,6 +508,13 @@ function rerenderAllModules() {
   if (typeof renderAdmins === "function") renderAdmins();     // it-admin
 }
 
+  function forceIssueRender(){
+  if (typeof render === "function") {
+    render(); // it-issue
+  }
+}
+
+  
   function forceAdminRender() {
   if (typeof renderAdmins === "function") {
     renderAdmins();
@@ -521,7 +525,9 @@ function showIssue(){
   hideAllModules();
   welcomeText.style.display = "none";
   issueModule.classList.remove("hidden");
+  forceIssueRender();   // 🔥 THIS FIXES IT-ISSUE
 }
+
 
 function showRequest(){
   hideAllModules();
@@ -545,6 +551,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
