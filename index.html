@@ -42,19 +42,24 @@ button{cursor:pointer}
 }
 
 /* Sticky module headings */
-.module-heading {
+.module-heading{
   position: sticky;
-  top: 82px;       /* header + nav height */
+  top: 142px;        /* header (80) + nav (~60) */
   background: white;
-  z-index: 802;     /* above action bar */ 
-}  
+  z-index: 902;
+  padding: 8px 10px;
+  border-bottom: 1px solid #ccc;
+}
   
   /* ===== STICKY ACTION BAR ===== */
 .action-bar{
   position: sticky;
-  top: 122px; /* header + nav */
-  background: white; 
-  z-index: 801;
+  top: 182px;        /* heading height */
+  background: white;
+  z-index: 901;
+  padding: 8px 10px;
+  display: flex;
+  gap: 10px;
 }
 
   .action-bar h2 {
@@ -64,17 +69,17 @@ button{cursor:pointer}
   flex-shrink: 0;       /* prevent heading from shrinking */
 }
   /* Table container - scrollable independently */
-.table-container {
-  max-height: calc(100vh - 162px); /* leave space for nav + heading + action */
+.table-container{
+  max-height: calc(100vh - 240px);
   overflow-y: auto;
 }
 
   /* Sticky table headers */
-.table-container table thead th {
+.table-container thead th{
   position: sticky;
-  top: 0; /* relative to scrollable container */
+  top: 0;
   background: #eee;
-  z-index: 800;
+  z-index: 900;
 }
 
 /* HEADER */
@@ -493,6 +498,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
