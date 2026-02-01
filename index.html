@@ -439,8 +439,7 @@ window.onload = () => {
     ROLE === "admin" ? "Welcome Admin" : "Welcome User";
 
   // keep tooltip
-  document.getElementById("headerRole").title =
-    ROLE === "admin" ? "Admin" : "User";
+
 };
 
 
@@ -489,6 +488,7 @@ welcomeText.style.display = "block";
 issueModule.classList.add("hidden");
 setTimeout(() => {
   rerenderAllModules();
+  forceAdminRender(); // 🔥 important
 }, 0);
 }
 
@@ -510,7 +510,11 @@ function rerenderAllModules() {
   if (typeof renderAdmins === "function") renderAdmins();     // it-admin
 }
 
-
+  function forceAdminRender() {
+  if (typeof renderAdmins === "function") {
+    renderAdmins();
+  }
+}
 
 function showIssue(){
   hideAllModules();
@@ -528,6 +532,7 @@ function showAdmin(){
   hideAllModules();
   welcomeText.style.display = "none";
   adminModule.classList.remove("hidden");
+  forceAdminRender(); // 🔥 immediate admin controls
 }
 </script>
 
@@ -538,6 +543,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
