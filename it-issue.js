@@ -91,7 +91,7 @@ function editTicket(t) {
   department.value = t.department;
   description.value = t.description;
   status.value = t.status || "";  // <-- empty if new ticket
-  openForm();
+  openIssueForm();
 }
 
 // UPDATE ACTION (dropdown)
@@ -114,6 +114,7 @@ function deleteTicket(id, action){
 
 // RENDER TABLE
 function render() {
+  const currentRole = ROLE || localStorage.getItem("ROLE");
   ticketTable.innerHTML = "";
   
   const openTickets = tickets.filter(t => t.action === "Open").length;
@@ -130,7 +131,7 @@ function render() {
         <td>${t.status !== undefined && t.status !== "" ? t.status : "-"}</td>
         <td>
           ${
-            ROLE === "admin"
+            currentRole === "admin"
             ? `<div style="display:flex; gap:5px; align-items:center; justify-content:center;">
                 <select onchange="updateAction('${t.id}', this.value)">
                   <option ${t.action==="Open"?"selected":""}>Open</option>
@@ -173,6 +174,7 @@ function exportExcel() {
 }
 
 window.render = render;
+
 
 
 
