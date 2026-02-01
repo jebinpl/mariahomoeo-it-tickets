@@ -90,7 +90,8 @@ if (adminForm) {
 ================================ */
 function openAdminForm() {
   adminForm.classList.remove("hidden");
-  adminStatus.disabled = window.ROLE !== "admin";
+  adminStatus.disabled =
+  (window.ROLE || localStorage.getItem("ROLE")) !== "admin";
 }
 
 function closeAdminForm() {
@@ -136,6 +137,7 @@ function deleteAdminTicket(id, action) {
    RENDER TABLE
 ================================ */
 function renderAdminTickets() {
+  const currentRole = window.ROLE || localStorage.getItem("ROLE");
   adminTable.innerHTML = "";
 
   const open = adminTickets.filter(t => t.action === "Open").length;
@@ -152,7 +154,7 @@ function renderAdminTickets() {
         <td>${t.status || "-"}</td>
         <td>
           ${
-            String(window.ROLE) === "admin"
+            currentRole === "admin"
               ? `
               <div style="display:flex;gap:5px;justify-content:center;">
                 <select onchange="updateAdminAction('${t.id}',this.value)">
@@ -205,6 +207,7 @@ function exportAdminExcel() {
 }
 
 window.renderAdmins = renderAdminTickets;
+
 
 
 
