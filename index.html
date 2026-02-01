@@ -488,6 +488,7 @@ welcomeText.style.display = "block";
 issueModule.classList.add("hidden");
 setTimeout(() => {
   rerenderAllModules();
+  forceRequestRender();
   forceAdminRender(); // 🔥 important
 }, 0);
 }
@@ -526,6 +527,7 @@ function showRequest(){
   hideAllModules();
   welcomeText.style.display = "none";
   requestModule.classList.remove("hidden");
+  forceRequestRender();
 }
 
 function showAdmin(){
@@ -543,6 +545,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
