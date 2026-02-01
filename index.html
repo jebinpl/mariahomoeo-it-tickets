@@ -174,6 +174,29 @@ th{background:#eee}
   font-weight:normal;
 }
 
+  /* ===== HEADER ROLE (Emoji + Welcome Text) ===== */
+#headerRoleBox{
+  position:absolute;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  text-align:center;
+  z-index:1100;
+  min-width:110px;
+}
+
+#headerRoleIcon{
+  font-size:26px;
+  line-height:1;
+}
+
+#headerRoleText{
+  font-size:12px;
+  margin-top:4px;
+  color:white;
+  white-space:nowrap;
+}
+
   
 </style>
 </head>
@@ -218,7 +241,10 @@ th{background:#eee}
     <div class="header-center">
       <h2>IT Ticketing System</h2>
     </div>
-    <span id="headerRole"></span>
+    <div id="headerRoleBox">
+  <div id="headerRoleIcon"></div>
+  <div id="headerRoleText"></div>
+</div>
   </div>
 
   <!-- NAV -->
@@ -397,16 +423,26 @@ th{background:#eee}
 window.ROLE = "";
 window.onload = () => {
   const savedRole = localStorage.getItem("ROLE");
-  if(savedRole){
-    ROLE = savedRole;
-    loginHeader.classList.add("hidden");
-    loginPage.classList.add("hidden");
-    dashboard.classList.remove("hidden");
+  if (!savedRole) return;
 
-    headerRole.innerText = ROLE === "admin" ? "👨‍💼" : "👤";
-    headerRole.title = ROLE === "admin" ? "Admin" : "User";
-  }
+  ROLE = savedRole;
+
+  loginHeader.classList.add("hidden");
+  loginPage.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+
+  // 🔥 NEW: icon + welcome text
+  document.getElementById("headerRoleIcon").innerText =
+    ROLE === "admin" ? "👨‍💼" : "👤";
+
+  document.getElementById("headerRoleText").innerText =
+    ROLE === "admin" ? "Welcome Admin" : "Welcome User";
+
+  // keep tooltip
+  document.getElementById("headerRole").title =
+    ROLE === "admin" ? "Admin" : "User";
 };
+
 
 function login(){
   const role = roleSelect.value;
@@ -438,8 +474,12 @@ resetIdleTimer(); // 🔥 important
   loginHeader.classList.add("hidden");   // HIDE login header
   loginPage.classList.add("hidden");
   dashboard.classList.remove("hidden");
-document.getElementById("headerRole").innerText =
+document.getElementById("headerRoleIcon").innerText =
   ROLE === "admin" ? "👨‍💼" : "👤";
+
+document.getElementById("headerRoleText").innerText =
+  ROLE === "admin" ? "Welcome Admin" : "Welcome User";
+
 
 document.getElementById("headerRole").title =
   ROLE === "admin" ? "Admin" : "User";
@@ -498,6 +538,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
