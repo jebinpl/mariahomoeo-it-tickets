@@ -265,6 +265,11 @@ th{background:#eee}
   <span id="adminOpenCount" class="open-badge">0</span>
 </span>
 
+    <span class="nav-link" onclick="showIncident()">
+  IT-Incident
+  <span id="incidentOpenCount" class="open-badge">0</span>
+</span>
+
     <span class="logout" onclick="logout()">Logout</span>
   </div>
 
@@ -396,6 +401,45 @@ th{background:#eee}
   </table>
 </div>
 </div> 
+
+    <!-- IT INCIDENT -->
+<div id="incidentModule" class="hidden">
+  <h2 class="module-heading">IT-Incident</h2>
+
+  <div class="action-bar">
+    <button onclick="openIncidentForm()">➕ Create Incident</button>
+    <button onclick="exportIncidentExcel()">📊 Export Excel</button>
+  </div>
+
+  <form id="incidentForm" class="hidden">
+    <input id="incidentDivision" placeholder="Division" required>
+    <input id="incidentDepartment" placeholder="Department" required>
+    <input id="incidentDescription" placeholder="Incident Description (max 20 characters)" maxlength="20" required>
+    <label>Status</label>
+    <input id="incidentStatus" placeholder="Enter Status">
+
+    <button type="submit">Submit</button>
+    <button type="button" onclick="closeIncidentForm()">Cancel</button>
+  </form>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Incident ID</th>
+          <th>Division</th>
+          <th>Department</th>
+          <th>Description</th>
+          <th>Date Created</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="incidentTable"></tbody>
+    </table>
+  </div>
+</div>
+    
   </div>
 </div>
 
@@ -487,6 +531,7 @@ setTimeout(() => {
   forceIssueRender(); 
   forceRequestRender();
   forceAdminRender(); // 🔥 important
+  forceIncidentRender();
 }, 0);
 }
 
@@ -499,6 +544,7 @@ function hideAllModules(){
   issueModule.classList.add("hidden");
   requestModule.classList.add("hidden");
   adminModule.classList.add("hidden");
+  incidentModule.classList.add("hidden");
 }
 
 
@@ -521,6 +567,12 @@ function rerenderAllModules() {
   }
 }
 
+function forceIncidentRender(){
+  if (typeof renderIncidents === "function") {
+    renderIncidents();
+  }
+}  
+
 function showIssue(){
   hideAllModules();
   welcomeText.style.display = "none";
@@ -542,15 +594,25 @@ function showAdmin(){
   adminModule.classList.remove("hidden");
   forceAdminRender(); // 🔥 immediate admin controls
 }
+
+ function showIncident(){
+  hideAllModules();
+  welcomeText.style.display = "none";
+  incidentModule.classList.remove("hidden");
+  forceIncidentRender();
+} 
+  
 </script>
 
 <!-- IT ISSUE LOGIC -->
 <script src="it-issue.js"></script>
 <script src="it-request.js"></script>
 <script src="it-admin.js"></script>
+<script src="it-incident.js"></script>
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
