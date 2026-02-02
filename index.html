@@ -284,7 +284,7 @@ th{background:#eee}
       <form id="ticketForm" class="hidden">
         <input id="division" placeholder="Division" required>
         <input id="department" placeholder="Department" required>
-        <input id="description" placeholder="Issue Description (max 20 characters)" maxlength="20" required>   
+        <input id="description" placeholder="Issue Description (max 50 characters)" maxlength="50" required>   
 <label for="status">Status</label>
 <input id="status" placeholder="Enter Status">
         
@@ -325,8 +325,8 @@ th{background:#eee}
 
   <input
     id="requestDescription"
-    placeholder="Request Description (max 20 characters)"
-    maxlength="20"
+    placeholder="Request Description (max 50 characters)"
+    maxlength="50"
     required
   >
 
@@ -369,8 +369,8 @@ th{background:#eee}
     <input id="adminDepartment" placeholder="Department" required>
     <input
       id="adminDescription"
-      placeholder="Admin Ticket Description (max 20 characters)"
-      maxlength="20"
+      placeholder="Admin Ticket Description (max 50 characters)"
+      maxlength="50"
       required
     >
     <label>Status</label>
@@ -551,6 +551,7 @@ function showAdmin(){
 <script src="session.js"></script>
 </body>
 </html>
+
 
 
 
