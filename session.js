@@ -1,11 +1,21 @@
 // ===== Session Timeout =====
 let idleTimer;
-const IDLE_LIMIT = 01 * 60 * 1000; // 10 minutes
+function getIdleLimit() {
+  const role = localStorage.getItem("ROLE");
+
+  if (role === "admin") {
+    return 30 * 60 * 1000; // 30 minutes
+  }
+
+  return 5 * 60 * 1000; // 5 minutes (default = user)
+}
 
 function resetIdleTimer() {
   if (localStorage.getItem("loggedIn") !== "true") return;
 
   clearTimeout(idleTimer);
+
+  const IDLE_LIMIT = getIdleLimit(); // 🔥 role-based timeout
   idleTimer = setTimeout(logoutUser, IDLE_LIMIT);
 }
 
@@ -28,5 +38,6 @@ function logoutUser() {
 if (localStorage.getItem("loggedIn") === "true") {
   resetIdleTimer();
 }
+
 
 
